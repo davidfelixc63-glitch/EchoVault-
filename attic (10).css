@@ -1,0 +1,2014 @@
+/*
+  ATTIC.CSS — styles specific to the Attic feature only.
+  Linked from the main index.html <head> via:
+    <link rel="stylesheet" href="Attic/attic.css">
+
+  IMPORTANT: this file uses plain hand-written CSS, NOT Tailwind utilities,
+  for anything inside the fetch()-injected fragment (attic.html). Tailwind's
+  CDN script scans the page once on load and does not reliably re-scan content
+  injected later via fetch() + innerHTML — so Tailwind classes in attic.html
+  would render unstyled. If you ever see Attic markup showing up unstyled,
+  this is the first thing to check.
+
+  SECTIONS IN THIS FILE (in order):
+    1. UTILITY (hidden toggle)
+    2. ATTIC MODE                      — hides main EchoVault nav, locks scroll
+    3. MODAL + LAYOUT COMPONENTS       — backdrop, card, headings, inputs, button
+    4. FIRST-ENTRY REVEAL ANIMATIONS   — door creak, light flood, dust rise, quick door beat
+    5. HUB                             — full-screen room grid, doors, header, back button
+    (Future room-specific styles will be appended below as new sections,
+    each clearly labeled the same way — paste new room CSS at the bottom.)
+*/
+
+/* ============================================================ */
+/* SECTION 1: UTILITY                                            */
+/* ============================================================ */
+.attic-hidden { display: none !important; }
+#atticRoot .hidden { display: none !important; }
+
+/* ============================================================ */
+/* SECTION 2: ATTIC MODE                                         */
+/* ============================================================ */
+/* Applied to <body> for the entire time the user is "inside" the Attic —
+   from the moment the door is tapped on Showcase until they tap
+   "Back to EchoVault" on the hub. Hides the main site's nav (logo,
+   hamburger, links) and locks background scroll, so the Attic reads as
+   a separate space with exactly two connection points: the Showcase
+   door (in) and the hub's back button (out). */
+body.attic-active nav { display: none !important; }
+body.attic-active { overflow: hidden; }
+
+/* ============================================================ */
+/* SECTION 3: MODAL + LAYOUT COMPONENTS                          */
+/* ============================================================ */
+.attic-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+  padding: 16px;
+}
+
+.attic-modal-card {
+  background: linear-gradient(to bottom, #18181b, #1c130d);
+  border: 1px solid rgba(146, 64, 14, 0.4);
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  max-width: 28rem;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(217, 119, 6, 0.15);
+  box-sizing: border-box;
+}
+
+.attic-emoji-lg { font-size: 3rem; margin-bottom: 12px; }
+.attic-emoji-md { font-size: 2.25rem; margin-bottom: 8px; }
+
+.attic-heading {
+  color: #fde68a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.875rem;
+  margin: 0;
+}
+.attic-heading-sm { font-size: 1.5rem; }
+
+.attic-body-text {
+  color: rgba(253, 230, 138, 0.7);
+  margin-top: 12px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.attic-subtext {
+  color: rgba(253, 230, 138, 0.5);
+  margin-top: 16px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.attic-subtext-center { color: rgba(253, 230, 138, 0.6); margin-top: 8px; font-size: 0.875rem; }
+
+.attic-label { color: rgba(253, 230, 138, 0.6); font-size: 0.75rem; margin-bottom: 8px; }
+
+.attic-trigger-block { margin-top: 20px; text-align: left; }
+
+.attic-input {
+  width: 100%;
+  background: rgba(39, 39, 42, 0.8);
+  border: 1px solid rgba(120, 53, 15, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  color: #fffbeb;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  box-sizing: border-box;
+}
+.attic-input::placeholder { color: rgba(253, 230, 138, 0.2); }
+.attic-input-center { text-align: center; }
+
+.attic-error { color: #f87171; font-size: 0.75rem; margin-top: 12px; }
+
+.attic-btn-primary {
+  width: 100%;
+  margin-top: 20px;
+  background: #f59e0b;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.attic-btn-primary:hover { background: #fbbf24; }
+
+/* ============================================================ */
+/* SECTION 4: FIRST-ENTRY REVEAL ANIMATIONS                      */
+/* ============================================================ */
+.attic-reveal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.attic-reveal-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.attic-reveal-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.attic-reveal-door {
+  font-size: 4.5rem;
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes atticDoorCreak {
+  0% { opacity: 0; transform: scale(0.9) rotate(0deg); }
+  15% { opacity: 1; transform: scale(0.95) rotate(0deg); }
+  40% { transform: scale(1) rotate(-8deg); }
+  60% { transform: scale(1) rotate(6deg); }
+  80% { transform: scale(1.05) rotate(-3deg); }
+  100% { opacity: 0; transform: scale(1.4) rotate(0deg); }
+}
+.attic-door-creak { animation: atticDoorCreak 1.6s ease-in-out forwards; }
+
+/* Quick beat played ON the Showcase page door itself, right before Attic
+   mode kicks in — a small confirmation, not the full cinematic reveal. */
+@keyframes atticDoorQuickOpen {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.attic-door-quick-open { animation: atticDoorQuickOpen 0.7s ease-in-out; }
+
+@keyframes atticLightFlood {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.attic-light-flood {
+  background: radial-gradient(circle at 50% 60%, rgba(217,119,6,0.55) 0%, rgba(120,53,15,0.35) 35%, rgba(0,0,0,0.9) 75%);
+  animation: atticLightFlood 1.8s ease-out forwards;
+}
+
+@keyframes atticDustRise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translateY(-120px) scale(0.4); opacity: 0; }
+}
+.attic-dust-mote {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: rgba(252, 211, 77, 0.7);
+  border-radius: 9999px;
+  animation: atticDustRise 3s ease-out forwards;
+}
+
+/* ============================================================ */
+/* SECTION 5: HUB                                                */
+/* ============================================================ */
+.attic-hub-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: radial-gradient(circle at 50% 0%, #2a1a0f 0%, #0a0705 70%);
+  overflow-y: auto;
+  padding: 32px 20px 60px;
+  box-sizing: border-box;
+}
+
+.attic-room-title {
+  color: #fde68a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+.attic-back-btn {
+  display: block;
+  margin: 0 0 20px 0;
+  background: transparent;
+  border: 1px solid rgba(253, 230, 138, 0.25);
+  color: rgba(253, 230, 138, 0.7);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.attic-back-btn:hover {
+  border-color: rgba(253, 230, 138, 0.6);
+  color: #fde68a;
+}
+
+.attic-hub-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.attic-hub-title {
+  color: #fde68a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.25rem;
+  margin: 0;
+}
+.attic-hub-subtitle {
+  color: rgba(253, 230, 138, 0.5);
+  font-size: 0.875rem;
+  margin-top: 6px;
+}
+
+.attic-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.attic-room-door {
+  background: linear-gradient(to bottom, #241a12, #150e08);
+  border: 1px solid color-mix(in srgb, var(--room-color) 35%, transparent);
+  border-radius: 18px;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.attic-room-door:hover,
+.attic-room-door:active {
+  transform: translateY(-3px);
+  border-color: var(--room-color);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--room-color) 25%, transparent);
+}
+
+.attic-room-icon {
+  font-size: 2.25rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--room-color) 60%, transparent));
+}
+
+.attic-room-label {
+  color: #fde68a;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ============================================================ */
+/* FUTURE SECTIONS GO BELOW THIS LINE (hub, room themes, etc.)   */
+/* ============================================================ */
+
+/* ============================================================ */
+/* SECTION 6: LIBRARY OF WONDERS                                 */
+/* ============================================================ */
+.attic-library-favorites-btn {
+  display: block;
+  margin: 0 auto 20px;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: #6ee7b7;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.attic-library-category-card {
+  background: linear-gradient(to bottom, #241a12, #150e08);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: 18px;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.attic-library-category-card:hover,
+.attic-library-category-card:active { transform: translateY(-3px); }
+
+.attic-library-category-card.attic-library-soon {
+  opacity: 0.4;
+  cursor: default;
+  filter: grayscale(1);
+}
+.attic-library-category-card.attic-library-soon:hover { transform: none; }
+
+.attic-library-category-icon { font-size: 2.25rem; margin-bottom: 10px; }
+.attic-library-category-label { color: #fde68a; font-size: 0.8rem; font-weight: 600; }
+.attic-library-category-sub { color: rgba(253, 230, 138, 0.4); font-size: 0.65rem; margin-top: 4px; }
+
+.attic-library-card-stage {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+
+.attic-library-card {
+  background: linear-gradient(to bottom, #18181b, #1c130d);
+  border: 1px solid rgba(146, 64, 14, 0.4);
+  border-radius: 24px;
+  padding: 36px 24px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(217, 119, 6, 0.12);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.attic-library-card.attic-library-card-swiping {
+  opacity: 0;
+  transform: translateX(var(--swipe-dir, -40px));
+}
+
+.attic-library-fact-text {
+  color: #fffbeb;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+.attic-library-fact-source {
+  color: rgba(253, 230, 138, 0.4);
+  font-size: 0.75rem;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.attic-library-controls {
+  max-width: 480px;
+  margin: 20px auto 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.attic-library-nav-btn {
+  background: rgba(39, 39, 42, 0.8);
+  border: 1px solid rgba(120, 53, 15, 0.4);
+  color: #fde68a;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.attic-library-whoa-btn {
+  background: #f59e0b;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.attic-library-whoa-btn.attic-library-whoa-active {
+  background: #fde047;
+  transform: scale(1.05);
+}
+
+.attic-library-favorites-list {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attic-library-favorite-item {
+  background: linear-gradient(to bottom, #18181b, #1c130d);
+  border: 1px solid rgba(146, 64, 14, 0.4);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+.attic-library-favorite-text {
+  color: #fffbeb;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.attic-library-favorite-actions {
+  display: flex;
+  gap: 10px;
+}
+.attic-library-favorite-share-btn,
+.attic-library-favorite-remove-btn {
+  background: transparent;
+  border: 1px solid rgba(253, 230, 138, 0.25);
+  color: rgba(253, 230, 138, 0.7);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.attic-library-share-canvas {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+
+.riddle-category-grid { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+.riddle-category-card {
+  background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 14px; padding: 16px; display: flex; justify-content: space-between;
+  align-items: center; cursor: pointer; transition: transform 0.15s;
+}
+.riddle-category-card:active { transform: scale(0.97); }
+.riddle-category-card.locked { opacity: 0.4; pointer-events: none; }
+.riddle-category-progress { font-size: 0.8rem; color: #a5b4fc; }
+
+.riddle-card {
+  background: rgba(30, 27, 20, 0.6); border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 16px; padding: 20px; margin: 16px;
+}
+.riddle-story { font-style: italic; color: #d4cbb8; margin-bottom: 12px; line-height: 1.5; }
+.riddle-prompt { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; }
+.riddle-hints { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.riddle-hint-text { font-size: 0.9rem; color: #c4b5fd; background: rgba(99,102,241,0.1); padding: 8px 12px; border-radius: 10px; }
+.riddle-input-row { display: flex; gap: 8px; }
+.riddle-input-row input {
+  flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(99,102,241,0.3);
+  background: rgba(0,0,0,0.3); color: #fff;
+}
+.riddle-input-row button { padding: 10px 16px; border-radius: 10px; background: #6366f1; color: #fff; border: none; }
+.riddle-feedback { margin-top: 10px; font-size: 0.9rem; min-height: 1.2em; }
+.riddle-feedback.correct { color: #4ade80; }
+.riddle-feedback.wrong { color: #f87171; }
+.riddle-action-row { display: flex; gap: 10px; margin-top: 14px; }
+.riddle-hint-btn, .riddle-giveup-btn, .riddle-next-btn {
+  padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(99,102,241,0.4);
+  background: transparent; color: #c4b5fd; font-size: 0.85rem;
+}
+.riddle-next-btn { background: #6366f1; color: #fff; }
+
+@keyframes riddleFlicker {
+  0%, 100% { opacity: 0.5; transform: translateY(0) scale(1); }
+  50% { opacity: 0.9; transform: translateY(-4px) scale(1.08); }
+}
+@keyframes riddleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+#riddleDenCategoryScreen, #riddleCardScreen {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(167,139,250,0.14), transparent 40%),
+    radial-gradient(circle at 80% 85%, rgba(99,102,241,0.12), transparent 45%),
+    radial-gradient(circle at 50% 0%, #201229 0%, #0a0710 70%);
+}
+
+#riddleDenCategoryScreen .attic-room-title,
+#riddleCardScreen .riddle-progress-label {
+  text-shadow: 0 0 14px rgba(167,139,250,0.45);
+}
+.riddle-mystery-decor { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.riddle-mystery-decor span {
+  position: absolute; opacity: 0.55;
+  filter: drop-shadow(0 0 6px rgba(167,139,250,0.5));
+}
+.riddle-mystery-decor span:nth-child(1) { top: 8%;  left: 8%;  font-size: 1.4rem; animation: riddleFlicker 4s ease-in-out infinite; }
+.riddle-mystery-decor span:nth-child(2) { top: 14%; right: 10%; font-size: 1.1rem; animation: riddleFloat 6s ease-in-out infinite; }
+.riddle-mystery-decor span:nth-child(3) { bottom: 14%; left: 12%; font-size: 1.2rem; animation: riddleFloat 5s ease-in-out infinite reverse; }
+.riddle-mystery-decor span:nth-child(4) { bottom: 10%; right: 14%; font-size: 1rem;  animation: riddleFlicker 3.5s ease-in-out infinite; }
+#riddleCategoryList, .riddle-card { position: relative; z-index: 1; }
+.riddle-card::before {
+  content: "🔮";
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  font-size: 1.3rem; background: #150f24; padding: 2px 10px; border-radius: 50%;
+  border: 1px solid rgba(167,139,250,0.35);
+}
+.riddle-prompt { font-family: Georgia, 'Times New Roman', serif; letter-spacing: 0.3px; }
+
+
+.time-chamber-intro {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: rgba(224, 212, 247, 0.65);
+  text-align: center;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 0 20px 32px;
+  line-height: 1.6;
+}
+.time-chamber-doors { display: flex; flex-direction: column; gap: 18px; max-width: 420px; margin: 0 auto; padding: 0 20px; }
+.time-chamber-door {
+  background: linear-gradient(to bottom, #18181b, #140f1c);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 0 50px rgba(124, 58, 237, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.time-chamber-door:active { transform: scale(0.98); box-shadow: 0 0 60px rgba(124, 58, 237, 0.2); }
+.door-icon { display: block; font-size: 2.5rem; margin-bottom: 12px; opacity: 0.9; }
+.door-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #e0d4f7;
+  font-size: 1.25rem;
+}
+
+.time-slot-grid { display: flex; flex-direction: column; gap: 14px; max-width: 420px; margin: 0 auto; padding: 8px 20px 40px; }
+.time-slot {
+  border: 1px dashed rgba(124, 58, 237, 0.3);
+  border-radius: 20px;
+  padding: 22px;
+  text-align: center;
+  color: rgba(224, 212, 247, 0.45);
+  font-family: Georgia, 'Times New Roman', serif;
+  cursor: pointer;
+  min-height: 60px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.time-slot:active { border-color: rgba(124, 58, 237, 0.5); }
+.time-slot.filled {
+  border-style: solid;
+  background: linear-gradient(to bottom, rgba(124,58,237,0.1), rgba(124,58,237,0.03));
+  color: #e0d4f7;
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.08);
+}
+.time-slot.marker { border-style: dotted; opacity: 0.35; font-size: 0.85rem; font-style: italic; }
+.time-slot .countdown { font-size: 0.8rem; color: #a78bfa; margin-top: 6px; font-style: italic; }
+.time-slot.filled .slot-hint { display: block; font-size: 0.7rem; opacity: 0.45; margin-top: 8px; }
+
+
+.memory-picker-list { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; margin: 12px 0; }
+.memory-picker-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: rgba(124, 58, 237, 0.04);
+  cursor: pointer;
+  color: #e0d4f7;
+}
+.memory-picker-item.selected { border-color: rgba(124, 58, 237, 0.6); background: rgba(124, 58, 237, 0.12); }
+.memory-picker-title { font-size: 0.95rem; }
+.memory-picker-date { font-size: 0.75rem; color: rgba(224, 212, 247, 0.5); }
+
+.duration-options { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.duration-options button { padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(124,58,237,0.4); background: transparent; color: #c4b5fd; }
+.confirm-btn { width: 100%; padding: 12px; margin-top: 16px; border-radius: 12px; background: #7c3aed; color: #fff; border: none; }
+.reveal-content { text-align: center; padding: 40px 20px; }
+.reveal-voice-note { display: block; width: 100%; margin-top: 20px; }
+
+.duration-options button.selected {
+  background: rgba(124,58,237,0.25);
+  border-color: #a78bfa;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(124,58,237,0.4);
+}
+
+/* --- Time Chamber: emotional/mature redesign --- */
+#timeChamberScreen, #buryScreen, #sendScreen {
+  background:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 75% 15%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 35% 60%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 85% 70%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(circle at 20% 15%, rgba(124,58,237,0.14), transparent 40%),
+    radial-gradient(circle at 80% 85%, rgba(167,139,250,0.10), transparent 45%),
+    radial-gradient(circle at 50% 0%, #1c1330 0%, #0a0712 70%);
+}
+
+#timeChamberScreen .attic-room-title,
+#buryScreen .attic-room-title,
+#sendScreen .attic-room-title {
+  text-shadow: 0 0 14px rgba(124,58,237,0.4);
+}
+.chamber-mystery-decor { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.chamber-mystery-decor span {
+  position: absolute; opacity: 0.5;
+  filter: drop-shadow(0 0 6px rgba(167,139,250,0.45));
+}
+.chamber-mystery-decor span:nth-child(1) { top: 10%; left: 10%; font-size: 1.3rem; animation: riddleFlicker 4.5s ease-in-out infinite; }
+.chamber-mystery-decor span:nth-child(2) { top: 16%; right: 12%; font-size: 1.1rem; animation: riddleFloat 6.5s ease-in-out infinite; }
+.chamber-mystery-decor span:nth-child(3) { bottom: 16%; left: 14%; font-size: 1.2rem; animation: riddleFloat 5.5s ease-in-out infinite reverse; }
+.chamber-mystery-decor span:nth-child(4) { bottom: 10%; right: 16%; font-size: 1rem; animation: riddleFlicker 3.8s ease-in-out infinite; }
+.time-chamber-intro, .time-chamber-doors, #burySlotGrid, #sendSlotGrid { position: relative; z-index: 1; }
+.time-chamber-door { position: relative; overflow: hidden; }
+.time-chamber-door::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(167,139,250,0.06) 50%, transparent 70%);
+  transform: translateX(-100%);
+}
+.time-chamber-door:active::after { transition: transform 0.6s; transform: translateX(100%); }
+.door-icon { filter: drop-shadow(0 0 8px rgba(167,139,250,0.5)); }
+.time-slot.filled { box-shadow: 0 0 30px rgba(124, 58, 237, 0.12), inset 0 0 20px rgba(124,58,237,0.05); }
+
+/* === Bury / Send modals — glass-morphism redesign === */
+#burySetupModal .attic-modal-card,
+#sendComposeModal .attic-modal-card {
+  background: linear-gradient(160deg, rgba(30,20,45,0.55), rgba(10,8,18,0.75));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 28px;
+  padding: 28px 24px 32px;
+  text-align: left;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+#burySetupModal .attic-modal-card {
+  border: 1px solid rgba(167,139,250,0.4);
+  box-shadow: 0 0 50px rgba(124,58,237,0.25), inset 0 0 40px rgba(124,58,237,0.05);
+}
+#sendComposeModal .attic-modal-card {
+  border: 1px solid rgba(251,191,36,0.4);
+  box-shadow: 0 0 50px rgba(245,158,11,0.25), inset 0 0 40px rgba(245,158,11,0.05);
+}
+#burySetupModal h3, #sendComposeModal h3 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin: 20px 0 12px;
+}
+#burySetupModal h3:first-of-type, #sendComposeModal h3:first-of-type { margin-top: 4px; }
+#burySetupModal h3 { color: #e0d4f7; }
+#sendComposeModal h3 { color: #fde68a; }
+#burySetupModal .attic-back-btn, #sendComposeModal .attic-back-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.memory-picker-item {
+  background: rgba(124,58,237,0.05);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.memory-picker-item.selected {
+  box-shadow: 0 0 20px rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.15);
+}
+
+.duration-options button {
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: Georgia, 'Times New Roman', serif;
+  transition: all 0.2s;
+  backdrop-filter: blur(6px);
+}
+#burySetupModal .duration-options button {
+  border: 1px solid rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.08);
+  color: #c4b5fd;
+}
+#burySetupModal .duration-options button.selected {
+  background: #7c3aed;
+  border-color: #a78bfa;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(124,58,237,0.5);
+}
+#sendComposeModal .duration-options button {
+  border: 1px solid rgba(251,191,36,0.35);
+  background: rgba(251,191,36,0.08);
+  color: #fde68a;
+}
+#sendComposeModal .duration-options button.selected {
+  background: linear-gradient(to bottom, #fbbf24, #d97706);
+  border-color: #fde68a;
+  color: #1c1300;
+  box-shadow: 0 0 16px rgba(245,158,11,0.5);
+}
+
+#buryCustomDate, #sendCustomDate {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  margin-top: 10px;
+  font-family: Georgia, 'Times New Roman', serif;
+  color-scheme: dark;
+  box-sizing: border-box;
+}
+#buryCustomDate { background: rgba(124,58,237,0.08); border: 1px solid rgba(167,139,250,0.4); color: #e0d4f7; }
+#sendCustomDate { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.4); color: #fde68a; }
+
+#sendMessageText {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(251,191,36,0.06);
+  border: 1px solid rgba(251,191,36,0.3);
+  color: #fde68a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+#buryVoiceBtn, #sendVoiceBtn {
+  border-radius: 999px;
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+#buryVoiceBtn { background: rgba(124,58,237,0.18); color: #e0d4f7; }
+#sendVoiceBtn { background: rgba(251,191,36,0.18); color: #fde68a; }
+#buryVoiceStatus, #sendVoiceStatus { font-size: 0.8rem; margin-top: 8px; opacity: 0.7; }
+#buryVoicePreview, #sendVoicePreview { width: 100%; margin-top: 10px; }
+
+.bury-mode-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
+.bury-mode-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.08);
+  color: #c4b5fd;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.85rem;
+}
+.bury-mode-btn.selected {
+  background: #7c3aed;
+  border-color: #a78bfa;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(124,58,237,0.4);
+}
+#buryNewTitle, #buryNewDescription {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(167,139,250,0.35);
+  color: #e0d4f7;
+  font-family: Georgia, 'Times New Roman', serif;
+  box-sizing: border-box;
+}
+#buryNewDescription { min-height: 80px; font-style: italic; resize: vertical; }
+#confirmBuryBtn {
+  
+  background: linear-gradient(to bottom, #8b5cf6, #6d28d9);
+  box-shadow: 0 0 24px rgba(124,58,237,0.4);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+}
+
+.send-photo-slot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  border: 2px dashed rgba(251,191,36,0.35);
+  background: rgba(251,191,36,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 12px 0;
+  overflow: hidden;
+}
+#sendPhotoPreview { width: 100%; height: 100%; object-fit: cover; }
+#sendPhotoPlaceholder { color: #fde68a; font-size: 0.85rem; opacity: 0.7; }
+.send-photo-remove {
+  position: absolute; top: 8px; right: 8px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,0,0,0.6); color: #fff; border: none;
+  cursor: pointer; font-size: 0.9rem;
+}
+.reveal-photo {
+  width: 100%; max-width: 280px; border-radius: 16px; margin: 16px auto; display: block;
+}
+#confirmSendBtn {
+  
+  background: linear-gradient(to bottom, #fbbf24, #d97706);
+  color: #1c1300;
+  box-shadow: 0 0 24px rgba(245,158,11,0.4);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+}
+
+
+
+/* ============================================================ */
+/* FOUNDERS HALL                                                 */
+/* ============================================================ */
+.founder-plaque {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  text-align: center;
+  background: linear-gradient(to bottom, #18181b, #1c1014);
+  border: 1px solid rgba(244, 114, 182, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 0 50px rgba(244, 114, 182, 0.1);
+}
+.founder-portrait-wrap { margin-bottom: 16px; }
+.founder-portrait, .founder-portrait-placeholder {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 10px;
+  border: 2px solid rgba(244, 114, 182, 0.4);
+}
+.founder-portrait-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  background: rgba(244, 114, 182, 0.08);
+}
+.founder-portrait-btn {
+  background: none; border: none;
+  color: #f9a8d4;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.founder-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #fce7f3;
+  font-size: 1.6rem;
+  margin: 4px 0 2px;
+}
+.founder-est { color: #f9a8d4; font-style: italic; font-size: 0.9rem; margin-bottom: 18px; }
+.founder-statement {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: rgba(252, 231, 243, 0.75);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.founder-statement-input {
+  width: 100%; min-height: 80px;
+  background: rgba(244, 114, 182, 0.06);
+  border: 1px solid rgba(244, 114, 182, 0.3);
+  border-radius: 12px;
+  color: #fce7f3;
+  padding: 10px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+.founder-edit-btn {
+  background: none; border: none;
+  color: #f9a8d4;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: block;
+  margin-left: auto; margin-right: auto;
+}
+.founder-share-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f472b6;
+  color: #1c1014;
+  font-weight: 600;
+  border: none;
+  margin-top: 6px;
+}
+
+.founder-ledger-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #fce7f3;
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 32px 0 16px;
+}
+.founder-ledger-list {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 4px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.founder-ledger-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(244, 114, 182, 0.05);
+  border: 1px solid rgba(244, 114, 182, 0.15);
+  cursor: pointer;
+}
+.founder-ledger-entry-empty { cursor: default; opacity: 0.5; }
+.founder-ledger-label {
+  font-size: 0.75rem;
+  color: #f9a8d4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.founder-ledger-value { color: #fce7f3; font-size: 0.95rem; }
+.founder-ledger-pending { font-style: italic; color: rgba(252, 231, 243, 0.4); }
+
+
+
+/* ============================================================ */
+/* SECTION: PUZZLE WORKSHOP — paste at the bottom of attic.css   */
+/* ============================================================ */
+
+.puzzle-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  padding: 24px 16px 48px;
+  background: radial-gradient(circle at 50% 0%, #1e2a4a, #0b0f1e 70%);
+  color: #e2e8f0;
+}
+
+/* --- source toggle + pack pills --- */
+.puzzle-source-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+}
+.puzzle-toggle-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  background: transparent;
+  color: #93c5fd;
+  font-weight: 600;
+  cursor: pointer;
+}
+.puzzle-toggle-btn.active {
+  background: #60a5fa;
+  color: #0b0f1e;
+  border-color: #60a5fa;
+}
+
+.puzzle-pack-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.puzzle-pack-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.puzzle-pack-pill.active {
+  border-color: #60a5fa;
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+}
+
+/* --- image picker grid --- */
+.puzzle-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.puzzle-image-thumb {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.puzzle-image-thumb:active,
+.puzzle-image-thumb.selected {
+  border-color: #60a5fa;
+}
+.puzzle-empty-note {
+  text-align: center;
+  color: #94a3b8;
+  padding: 32px 16px;
+}
+
+/* --- size picker --- */
+.puzzle-size-preview {
+  display: block;
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 16px auto 24px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+.puzzle-size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.puzzle-size-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  cursor: pointer;
+}
+.puzzle-size-label { font-size: 1.1rem; font-weight: 700; }
+.puzzle-size-sub { font-size: 0.8rem; color: #93c5fd; }
+
+/* --- game screen --- */
+.puzzle-game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-variant-numeric: tabular-nums;
+  color: #93c5fd;
+  margin-bottom: 12px;
+}
+
+.puzzle-board-wrap {
+  position: relative;
+  width: min(92vw, 420px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+.puzzle-board {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  gap: 3px;
+  background: #0b0f1e;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+}
+.puzzle-tile {
+  background-repeat: no-repeat;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.08s ease;
+}
+.puzzle-tile:active { transform: scale(0.96); }
+.puzzle-tile-blank { background: transparent; cursor: default; }
+
+.puzzle-peek-overlay {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.puzzle-result-banner {
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.puzzle-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.puzzle-ctrl-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.puzzle-ctrl-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+/* ============================================================ */
+/* SECTION: GAME ARCADE — paste at the bottom of attic.css       */
+/* ============================================================ */
+
+.arcade-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  padding: 24px 16px 48px;
+  background: radial-gradient(circle at 50% 0%, #3a1e12, #0e0705 70%);
+  color: #fef3e2;
+}
+
+/* --- hub grid --- */
+.arcade-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+  max-width: 560px;
+  margin: 20px auto 0;
+}
+.arcade-game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: center;
+}
+.arcade-game-card:active { transform: scale(0.97); }
+.arcade-game-icon { font-size: 2rem; }
+.arcade-game-name { font-weight: 700; }
+.arcade-game-desc { font-size: 0.78rem; color: #fdba74; }
+.arcade-locked {
+  opacity: 0.45;
+  cursor: default;
+}
+.arcade-locked:active { transform: none; }
+
+/* --- Memory Falls HUD --- */
+.mf-hud {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.mf-hud-item { color: #fdba74; }
+
+.mf-speed-meter-track {
+  width: min(92vw, 420px);
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto 16px;
+  overflow: hidden;
+}
+.mf-speed-meter-fill {
+  height: 100%;
+  width: 10%;
+  background: linear-gradient(90deg, #fbbf24, #ef4444);
+  transition: width 0.4s ease;
+}
+
+/* --- game area + falling words --- */
+.mf-game-area {
+  position: relative;
+  width: min(92vw, 420px);
+  height: 60vh;
+  max-height: 520px;
+  margin: 0 auto;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+.mf-hidden-input {
+  position: absolute;
+  opacity: 0;
+  height: 1px;
+  width: 1px;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+}
+
+.mf-word {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  transition: top linear;
+}
+.mf-letter { color: #fef3e2; }
+.mf-letter-typed { color: #4ade80; opacity: 0.5; }
+.mf-word-locked .mf-letter { color: #fbbf24; }
+
+.mf-explode {
+  animation: mfExplode 0.3s ease-out forwards;
+}
+@keyframes mfExplode {
+  0% { transform: translateX(-50%) scale(1); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1.8); opacity: 0; }
+}
+
+/* --- overlays --- */
+.mf-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(14, 7, 5, 0.9);
+  text-align: center;
+  padding: 24px;
+  z-index: 5;
+}
+.mf-primary-btn {
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #fb923c, #ef4444);
+  color: #1a0a05;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mf-secondary-btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #fef3e2;
+  cursor: pointer;
+}
+
+.mf-level-up-banner {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fbbf24;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.8);
+  z-index: 4;
+  animation: mfLevelUpPulse 1.2s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes mfLevelUpPulse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+
+/* ============================================================ */
+/* SECTION: ECHO MATCH — paste at the bottom of attic.css        */
+/* ============================================================ */
+
+.em-size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 24px auto 0;
+}
+.em-size-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fef3e2;
+  cursor: pointer;
+}
+.em-size-label { font-size: 1.1rem; font-weight: 700; }
+.em-size-sub { font-size: 0.8rem; color: #fdba74; }
+
+.em-hud {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.em-grid {
+  display: grid;
+  gap: 6px;
+  max-width: min(94vw, 480px);
+  margin: 0 auto;
+  perspective: 800px;
+}
+
+.em-card {
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+}
+.em-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s;
+}
+.em-card.flipped .em-card-inner,
+.em-card.matched .em-card-inner {
+  transform: rotateY(180deg);
+}
+.em-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.em-card-back {
+  background: linear-gradient(135deg, #fb923c, #ef4444);
+  font-size: 1.4rem;
+}
+.em-card-front {
+  transform: rotateY(180deg);
+  background: #1a0a05;
+  border: 1px solid rgba(251, 146, 60, 0.4);
+}
+.em-card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.em-card-front-icon {
+  font-size: 1.6rem;
+}
+.em-card-front-label {
+  font-size: 0.6rem;
+  color: #fdba74;
+  text-align: center;
+  padding: 0 2px;
+}
+.em-card.matched .em-card-front {
+  border-color: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+/* ============================================================ */
+/* SECTION: MEMORY WHACK-A-MOLE — paste at the bottom of attic.css */
+/* ============================================================ */
+
+.wm-target-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 20px 0 12px;
+}
+.wm-category-select {
+  display: block;
+  margin: 0 auto 16px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #1a0a05;
+  color: #fef3e2;
+  border: 1px solid rgba(251, 146, 60, 0.4);
+}
+.wm-start-btn {
+  display: block;
+  margin: 12px auto 0;
+}
+
+.wm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: min(90vw, 360px);
+  margin: 0 auto;
+}
+.wm-hole {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(251, 146, 60, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+.wm-card {
+  position: absolute;
+  inset: 4px;
+  border-radius: 10px;
+  background: #1a0a05;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transform: scale(0);
+  transition: transform 0.15s ease-out;
+}
+.wm-card.wm-visible { transform: scale(1); }
+.wm-card img { width: 100%; height: 100%; object-fit: cover; }
+.wm-card-label {
+  font-size: 0.65rem;
+  padding: 2px;
+  text-align: center;
+  color: #fef3e2;
+}
+.wm-card.wm-target { box-shadow: 0 0 0 2px #4ade80 inset; }
+
+
+/* ============================================================ */
+/* SECTION: STREAK KEEPER — paste at the bottom of attic.css     */
+/* ============================================================ */
+
+.sk-game-wrap {
+  position: relative;
+  width: min(94vw, 480px);
+  height: 260px;
+  margin: 12px auto 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: linear-gradient(180deg, #2a1408, #0e0705);
+}
+.sk-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
+/* ============================================================ */
+/* SECTION: DEV MUSEUM — paste at the bottom of attic.css        */
+/* ============================================================ */
+
+.museum-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  padding: 24px 16px 64px;
+  background: radial-gradient(circle at 50% 0%, #1f2937, #0b0f14 70%);
+  color: #e5e7eb;
+}
+
+.museum-section {
+  max-width: 560px;
+  margin: 28px auto 0;
+}
+.museum-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.museum-section-sub {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+/* --- timeline --- */
+.museum-timeline {
+  border-left: 2px solid rgba(96, 165, 250, 0.4);
+  padding-left: 16px;
+  margin-top: 12px;
+}
+.museum-timeline-item {
+  position: relative;
+  padding-bottom: 18px;
+}
+.museum-timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -21px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #60a5fa;
+}
+.museum-timeline-phase {
+  font-weight: 700;
+  color: #93c5fd;
+}
+.museum-timeline-desc {
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
+
+/* --- stats --- */
+.museum-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.museum-stat-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  text-align: center;
+}
+.museum-stat-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #60a5fa;
+}
+.museum-stat-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* --- bug wall --- */
+.museum-bug-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.museum-bug-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid #ef4444;
+  font-size: 0.82rem;
+  color: #d1d5db;
+}
+.museum-bug-item strong { color: #fca5a5; }
+
+/* --- dev secrets --- */
+.museum-secrets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+.museum-secret-card {
+  padding: 16px 10px;
+  border-radius: 12px;
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.museum-secret-card.revealed {
+  background: rgba(167, 139, 250, 0.18);
+  cursor: default;
+}
+.museum-secret-locked-label {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+/* --- tech plaque --- */
+.museum-tech-plaque {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.museum-tech-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #93c5fd;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.museum-future-note {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 8px;
+}
+
+
+/* ============================================================ */
+/* SECTION: ATTIC SOUNDTRACK SYSTEM — paste at the bottom of attic.css */
+/* ============================================================ */
+
+.attic-music-control-bar {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 70;
+  display: none; /* only shown while body.attic-active — see rule below */
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+body.attic-active .attic-music-control-bar {
+  display: flex;
+}
+.attic-music-ctrl-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.attic-music-volume-slider {
+  width: 70px;
+  accent-color: #fbbf24;
+}
+
+.attic-hub-disc-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 16px 0 20px;
+}
+
+.attic-disc {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #1a1a1a 28%, #444 30%, #222 55%, #111 100%);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  position: relative;
+}
+.attic-disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #666;
+}
+.attic-disc.attic-disc-active {
+  border-color: #fbbf24;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  animation: atticDiscSpin 3s linear infinite;
+}
+@keyframes atticDiscSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* ============================================================ */
+/* SECTION: MUSIC CORNER — paste at the bottom of attic.css      */
+/* ============================================================ */
+
+.music-corner-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  padding: 24px 16px 90px;
+  background: radial-gradient(circle at 50% 0%, #4a2410, #150a04 70%);
+  color: #fef3e2;
+}
+
+.mc-visualizer-canvas {
+  display: block;
+  width: min(94vw, 480px);
+  height: 140px;
+  margin: 16px auto;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.mc-now-playing {
+  text-align: center;
+  font-weight: 600;
+  color: #fdba74;
+  margin-bottom: 12px;
+  min-height: 1.2em;
+}
+
+.mc-player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.mc-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fef3e2;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.mc-play-btn {
+  width: 56px;
+  height: 56px;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #fb923c, #ef4444);
+  border: none;
+}
+
+.mc-track-list {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mc-track-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+.mc-track-row.mc-track-active {
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+}
+.mc-track-title { font-weight: 600; }
+.mc-track-date { font-size: 0.78rem; color: #9ca3af; }
+.mc-empty-note {
+  text-align: center;
+  color: #9ca3af;
+  padding: 24px 16px;
+}
+
+.mc-import-section {
+  max-width: 560px;
+  margin: 28px auto 0;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  opacity: 0.7;
+}
+.mc-import-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.mc-import-note {
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+
+
+.mc-import-balance {
+  font-weight: 600;
+  margin: 8px 0 16px;
+}
+.mc-import-track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mc-import-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.15);
+}
+.mc-import-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.mc-import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.mc-import-owned {
+  opacity: 0.7;
+  font-size: 0.9em;
+}
+
+
+.mm-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px 48px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 20%, #2b1d0f, #120b05 75%);
+}
+
+.mm-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  color: #e8d5b5;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.mm-hud-sprite { font-size: 1.3em; transition: transform 0.3s; }
+.mm-canvas {
+  background: #1a120a;
+  border: 3px solid #8a5a2b;
+  border-radius: 8px;
+  max-width: 100%;
+  touch-action: none;
+}
+.mm-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+}
+.mm-dpad-btn {
+  background: #3a2612;
+  color: #e8d5b5;
+  border: 1px solid #8a5a2b;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.mm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 6, 2, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #e8d5b5;
+  text-align: center;
+  z-index: 20;
+}
+.mm-levelup-sprite {
+  font-size: 3.5em;
+  animation: mmEvolvePulse 0.6s ease;
+}
+@keyframes mmEvolvePulse {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+
+
+.sk-evolve-banner {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #fde68a;
+  text-shadow: 0 0 12px rgba(253, 230, 138, 0.8);
+  z-index: 30;
+  pointer-events: none;
+}
+@keyframes skEvolvePulse {
+  0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+.sk-evolve-pulse {
+  animation: skEvolvePulse 0.6s ease;
+}
+
+
+.vg-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 14px 48px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 15%, #241a2e, #0b0810 75%);
+  color: #e8dcf5;
+}
+
+.vg-hud {
+  display: flex;
+  gap: 16px;
+  font-weight: 700;
+}
+.vg-canvas {
+  background: #150f1c;
+  border: 3px solid #7c5ba6;
+  border-radius: 8px;
+  max-width: 100%;
+}
+.vg-shop {
+  width: 100%;
+  max-width: 480px;
+}
+.vg-shop-label {
+  font-size: 0.8em;
+  color: #b79fd6;
+  margin: 8px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vg-shop-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vg-shop-btn {
+  background: #2e2140;
+  border: 1px solid #7c5ba6;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: #e8dcf5;
+  font-size: 0.85em;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.3;
+}
+.vg-shop-btn.vg-selected {
+  border-color: #f0c419;
+  box-shadow: 0 0 8px rgba(240, 196, 25, 0.6);
+}
+.vg-shop-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vg-shop-btn .vg-cost {
+  display: block;
+  color: #f0c419;
+  font-weight: 700;
+}

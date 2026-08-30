@@ -1,0 +1,809 @@
+<!--
+  ATTIC.HTML — fragment only, no <html>/<head>/<body> tags.
+  This gets fetched and injected into #atticRoot (in the main index.html) by Attic/attic.js.
+  Do NOT open this file directly in a browser — it's not a full page.
+
+  IMPORTANT: this fragment uses its own plain CSS classes (defined in attic.css),
+  NOT Tailwind utility classes. Tailwind's CDN script only scans the page once on
+  load and does not reliably pick up classes added later via fetch()-injection —
+  so anything Tailwind-based in here would render unstyled. Style changes go in
+  attic.css, section 2.
+
+  SECTIONS IN THIS FILE (in order):
+    1. FIRST-ENTRY REVEAL   — fullscreen dim/creak/light-flood sequence
+    2. CONGRATS + SETUP MODAL — "You found it" + password/trigger setup
+    (Future rooms/hub markup will be appended below as new sections, each
+    clearly labeled the same way — paste new room HTML at the bottom.)
+-->
+
+<!-- ============================================================ -->
+<!-- SECTION 1: FIRST-ENTRY REVEAL                                 -->
+<!-- ============================================================ -->
+<div id="atticRevealOverlay" class="attic-hidden attic-reveal-overlay">
+  <div id="atticRevealLight" class="attic-reveal-light"></div>
+  <div id="atticRevealDust" class="attic-reveal-dust"></div>
+  <div id="atticRevealDoor" class="attic-reveal-door">🚪</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: CONGRATS + FIRST-ENTRY SETUP MODAL                 -->
+<!-- ============================================================ -->
+<div id="atticCongratsModal" class="attic-hidden attic-modal-backdrop">
+  <div class="attic-modal-card">
+
+    <!-- Stage 1: Congrats -->
+    <div id="atticCongratsStage">
+      <div class="attic-emoji-lg">🕯️</div>
+      <h2 class="attic-heading">You found it.</h2>
+      <p class="attic-body-text">
+        Behind everything you've written, there was always this — a quiet room upstairs, waiting for you to be ready.
+      </p>
+      <p class="attic-subtext">
+        The Attic is a hidden space in EchoVault. Games, wonders, a place to bury memories and write to your future self — all yours, all private, unlocked only because you kept showing up.
+      </p>
+      <button id="atticCongratsContinueBtn" class="attic-btn-primary">
+        Continue →
+      </button>
+    </div>
+
+    <!-- Stage 2: Setup (password + first trigger) -->
+    <div id="atticSetupStage" class="attic-hidden">
+      <div class="attic-emoji-md">🔐</div>
+      <h2 class="attic-heading attic-heading-sm">Protect this place.</h2>
+      <p class="attic-subtext-center">
+        Choose a password to seal the Attic. Words only — no numbers.
+      </p>
+
+      <input id="atticPasswordInput" type="text"
+        placeholder="a word, or a few..."
+        class="attic-input attic-input-center">
+
+      <input id="atticPasswordConfirmInput" type="text"
+        placeholder="confirm your words"
+        class="attic-input attic-input-center">
+
+      <div class="attic-trigger-block">
+        <p class="attic-label">Your first trigger — a secret memory title that opens the door instantly.</p>
+        <input id="atticFirstTriggerInput" type="text"
+          placeholder="e.g. a memory title only you'd know"
+          class="attic-input">
+      </div>
+
+      <p id="atticSetupError" class="attic-hidden attic-error"></p>
+
+      <button id="atticSetupSaveBtn" class="attic-btn-primary">
+        Seal it →
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: HUB (8 room-doors + placeholder modal)             -->
+<!-- ============================================================ -->
+<div id="atticHubScreen" class="attic-hidden attic-hub-screen">
+  <button id="atticBackToEchoVaultBtn" class="attic-back-btn">← Back to EchoVault</button>
+  <div class="attic-hub-header">
+    <h1 class="attic-hub-title">The Attic</h1>
+    <p class="attic-hub-subtitle">Pick a door.</p>
+  </div>
+
+  <div id="atticHubDiscRow" class="attic-hub-disc-row"></div>
+
+  <div class="attic-hub-grid">
+    <div class="attic-room-door" data-room="arcade" style="--room-color:#22d3ee;">
+      <div class="attic-room-icon">🕹️</div>
+      <div class="attic-room-label">Game Arcade</div>
+    </div>
+    <div class="attic-room-door" data-room="wonders" style="--room-color:#34d399;">
+      <div class="attic-room-icon">📖</div>
+      <div class="attic-room-label">Library of Wonders</div>
+    </div>
+    <div class="attic-room-door" data-room="riddles" style="--room-color:#a78bfa;">
+      <div class="attic-room-icon">❓</div>
+      <div class="attic-room-label">Riddle Den</div>
+    </div>
+    <div class="attic-room-door" data-room="founders" style="--room-color:#f472b6;">
+      <div class="attic-room-icon">🏛️</div>
+      <div class="attic-room-label">Founders Hall</div>
+    </div>
+    <div class="attic-room-door" data-room="music" style="--room-color:#fb923c;">
+      <div class="attic-room-icon">🎵</div>
+      <div class="attic-room-label">Music Corner</div>
+    </div>
+    <div class="attic-room-door" data-room="puzzle" style="--room-color:#60a5fa;">
+      <div class="attic-room-icon">🧩</div>
+      <div class="attic-room-label">Puzzle Workshop</div>
+    </div>
+    <div class="attic-room-door" data-room="timechamber" style="--room-color:#818cf8;">
+      <div class="attic-room-icon">⏳</div>
+      <div class="attic-room-label">Time Chamber</div>
+    </div>
+    <div class="attic-room-door" data-room="museum" style="--room-color:#fbbf24;">
+      <div class="attic-room-icon">🏺</div>
+      <div class="attic-room-label">Dev Museum</div>
+    </div>
+  </div>
+</div>
+
+<!-- Placeholder modal for rooms not built yet -->
+<div id="atticRoomPlaceholderModal" class="attic-hidden attic-modal-backdrop">
+  <div class="attic-modal-card">
+    <div id="atticPlaceholderIcon" class="attic-emoji-lg"></div>
+    <h2 id="atticPlaceholderTitle" class="attic-heading"></h2>
+    <p id="atticPlaceholderText" class="attic-body-text"></p>
+    <button id="atticPlaceholderCloseBtn" class="attic-btn-primary">Back to the Attic</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FUTURE SECTIONS GO BELOW THIS LINE (individual room UIs, etc.) -->
+<!-- ============================================================ -->
+
+
+<!-- ============================================================ -->
+<!-- SECTION 4: LIBRARY OF WONDERS                                  -->
+<!-- ============================================================ -->
+
+<!-- 4a. Category select -->
+<div id="atticLibraryScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="closeLibraryToHub()">← Back to the Attic</button>
+  <div class="attic-hub-header">
+    <h1 class="attic-hub-title">Library of Wonders</h1>
+    <p class="attic-hub-subtitle">Pick a shelf.</p>
+  </div>
+  <button id="atticLibraryFavoritesBtn" class="attic-library-favorites-btn" onclick="openLibraryFavorites()">⭐ My Favorites</button>
+  <div id="atticLibraryCategoryGrid" class="attic-hub-grid"></div>
+</div>
+
+<!-- 4b. Fact card swipe view -->
+<div id="atticLibraryCardScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="closeLibraryCardScreen()">← Back to shelves</button>
+  <div class="attic-hub-header">
+    <h1 id="atticLibraryCardCategoryTitle" class="attic-hub-title attic-heading-sm"></h1>
+    <p id="atticLibraryCardProgress" class="attic-hub-subtitle"></p>
+  </div>
+
+  <div class="attic-library-card-stage">
+    <div id="atticLibraryCard" class="attic-library-card">
+      <p id="atticLibraryFactText" class="attic-library-fact-text"></p>
+      <p id="atticLibraryFactSource" class="attic-library-fact-source"></p>
+    </div>
+  </div>
+
+  <div class="attic-library-controls">
+    <button id="atticLibraryPrevBtn" class="attic-library-nav-btn" onclick="libraryShowPrev()">‹</button>
+    <button id="atticLibraryWhoaBtn" class="attic-library-whoa-btn" onclick="libraryToggleFavorite()">⭐ Whoa!</button>
+    <button id="atticLibraryNextBtn" class="attic-library-nav-btn" onclick="libraryShowNext()">›</button>
+  </div>
+  <p class="attic-subtext-center">Swipe or tap the arrows to move between facts.</p>
+</div>
+
+<!-- 4c. Favorites screen -->
+<div id="atticLibraryFavoritesScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="closeLibraryFavorites()">← Back to shelves</button>
+  <div class="attic-hub-header">
+    <h1 class="attic-hub-title attic-heading-sm">My Favorites</h1>
+    <p class="attic-hub-subtitle">The facts that made you say "whoa."</p>
+  </div>
+  <div id="atticLibraryFavoritesEmpty" class="attic-hidden attic-subtext-center">No favorites saved yet — tap ⭐ Whoa! on any fact that surprises you.</div>
+  <div id="atticLibraryFavoritesList" class="attic-library-favorites-list"></div>
+</div>
+
+<!-- Favorite share preview modal -->
+<div id="atticLibraryShareModal" class="attic-hidden attic-modal-backdrop">
+  <div class="attic-modal-card">
+    <canvas id="atticLibraryShareCanvas" width="1080" height="1080" class="attic-library-share-canvas"></canvas>
+    <input id="atticLibraryShareCaption" class="attic-input attic-input-center" maxlength="80" placeholder="Add a short caption (optional)">
+    <button class="attic-btn-primary" onclick="libraryUpdateShareCaption()">Update Preview</button>
+    <button class="attic-btn-primary" onclick="libraryShareFavorite()">📤 Share</button>
+    <button class="attic-back-btn" style="margin-top:10px;" onclick="closeLibraryShareModal()">Close</button>
+  </div>
+</div>
+
+
+<!-- Riddle Den: Category Select -->
+<div id="riddleDenCategoryScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Attic</button>
+  <div class="riddle-mystery-decor"><span>🕯️</span><span>🔮</span><span>🗝️</span><span>🌙</span></div>
+  <h2 class="attic-room-title">🧩 Riddle Den</h2>
+  
+  <div id="riddleCategoryList" class="riddle-category-grid"></div>
+</div>
+
+
+
+<!-- Riddle Den: Riddle Card -->
+<div id="riddleCardScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showRiddleDen()">← Categories</button>
+  <div class="riddle-mystery-decor"><span>🕯️</span><span>🔮</span><span>🗝️</span><span>🌙</span></div>
+  <div class="riddle-progress-label" id="riddleProgressLabel"></div>
+  
+  <div class="riddle-card" id="riddleCard">
+    <div class="riddle-story" id="riddleStory"></div>
+    <div class="riddle-prompt" id="riddlePrompt"></div>
+
+    <div id="riddleHints" class="riddle-hints"></div>
+
+    <div class="riddle-input-row">
+      <input type="text" id="riddleAnswerInput" placeholder="Type your answer..." autocomplete="off">
+      <button id="riddleSubmitBtn" onclick="handleSubmitRiddleAnswer()">Submit</button>
+    </div>
+
+    <div id="riddleFeedback" class="riddle-feedback"></div>
+
+    <div class="riddle-action-row">
+      <button id="riddleHintBtn" class="riddle-hint-btn hidden" onclick="handleShowHint()">💡 Hint</button>
+      <button id="riddleSkipBtn" class="riddle-skip-btn" onclick="handleSkipRiddle()">Skip →</button>
+      <button id="riddleGiveUpBtn" class="riddle-giveup-btn hidden" onclick="handleGiveUpRiddle()">Give up</button>
+      <button id="riddleNextBtn" class="riddle-next-btn hidden" onclick="loadNextRiddle()">Next Riddle →</button>
+    </div>
+    
+  </div>
+</div>
+
+
+<!-- Time Chamber Hub -->
+<div id="timeChamberScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Attic</button>
+  <div class="chamber-mystery-decor"><span>⏳</span><span>🌙</span><span>🕰️</span><span>✨</span></div>
+  <h2 class="attic-room-title">⏳ Time Chamber</h2>
+  <p class="time-chamber-intro">Some things need to rest before they're ready. Some things need time to arrive.</p>
+  <div class="time-chamber-doors">
+    <div class="time-chamber-door" onclick="openBuryScreen()">
+      <span class="door-icon">🪦</span>
+      <span class="door-label">Bury a Memory</span>
+    </div>
+    <div class="time-chamber-door" onclick="openSendScreen()">
+      <span class="door-icon">✉️</span>
+      <span class="door-label">Send to Future</span>
+    </div>
+  </div>
+</div>
+
+<!-- Bury a Memory -->
+<div id="buryScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showTimeChamber()">← Time Chamber</button>
+  <div class="chamber-mystery-decor"><span>🥀</span><span>🍂</span><span>🕯️</span><span>🌑</span></div>
+  <h2 class="attic-room-title">🪦 Bury a Memory</h2>
+  <div id="burySlotGrid" class="time-slot-grid"></div>
+</div>
+
+<!-- Send to Future -->
+<div id="sendScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showTimeChamber()">← Time Chamber</button>
+  <div class="chamber-mystery-decor"><span>🕊️</span><span>⭐</span><span>🌌</span><span>✉️</span></div>
+  <h2 class="attic-room-title">✉️ Send to Future</h2>
+  <div id="sendSlotGrid" class="time-slot-grid"></div>
+</div>
+
+<!-- Founders Hall -->
+<div id="foundersHallScreen" class="attic-hidden attic-hub-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Attic</button>
+  <h2 class="attic-room-title">🏛️ Founders Hall</h2>
+
+  <div id="founderPlaqueCard" class="founder-plaque">
+    <div class="founder-portrait-wrap">
+      <img id="founderPortraitImg" class="founder-portrait attic-hidden" alt="Founder portrait">
+      <div id="founderPortraitPlaceholder" class="founder-portrait-placeholder">🏛️</div>
+      <input type="file" id="founderPortraitInput" accept="image/*" class="attic-hidden" onchange="handleFounderPortraitChange(event)">
+      <button class="founder-portrait-btn" onclick="document.getElementById('founderPortraitInput').click()">Change portrait</button>
+    </div>
+
+    <h3 id="founderNameDisplay" class="founder-name"></h3>
+    <p id="founderEstDate" class="founder-est"></p>
+
+    <p id="founderStatementDisplay" class="founder-statement attic-hidden"></p>
+    <textarea id="founderStatementInput" class="founder-statement-input attic-hidden" maxlength="280" placeholder="Why did you start keeping this vault?"></textarea>
+    <button id="founderStatementEditBtn" class="founder-edit-btn" onclick="startFounderStatementEdit()">✎ Write your founding statement</button>
+    <button id="founderStatementSaveBtn" class="founder-edit-btn attic-hidden" onclick="saveFounderStatement()">Save</button>
+
+    <button id="founderShareBtn" class="founder-share-btn" onclick="generateFounderShareCard()">📤 Share Plaque</button>
+  </div>
+
+  <h3 class="founder-ledger-title">The Founder's Ledger</h3>
+  <div id="founderLedgerList" class="founder-ledger-list"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DEV MUSEUM — paste anywhere inside attic.html                 -->
+<!-- ============================================================ -->
+
+<div id="atticDevMuseumScreen" class="attic-hidden museum-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Back to Attic</button>
+  <h1 class="attic-hub-title">Dev Museum</h1>
+  <p class="attic-hub-subtitle">Behind the scenes of EchoVault itself.</p>
+
+  <!-- Changelog Timeline -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">🕰️ Build Timeline</h2>
+    <div id="museumTimeline" class="museum-timeline"></div>
+  </section>
+
+  <!-- Live Stats -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">📊 Live Exhibits</h2>
+    <div id="museumStats" class="museum-stats-grid"></div>
+  </section>
+
+  <!-- Bug Wall -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">🐛 Wall of Squashed Bugs</h2>
+    <div id="museumBugWall" class="museum-bug-wall"></div>
+  </section>
+
+  <!-- Dev Secrets -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">🔍 Dev Secrets</h2>
+    <p class="museum-section-sub">Tap a plaque to reveal it. Some are hidden until you find them.</p>
+    <div id="museumSecrets" class="museum-secrets-grid"></div>
+  </section>
+
+  <!-- Tech Stack Plaque -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">🛠️ Built With</h2>
+    <div class="museum-tech-plaque">
+      <span class="museum-tech-chip">HTML5</span>
+      <span class="museum-tech-chip">Tailwind CSS</span>
+      <span class="museum-tech-chip">Vanilla JavaScript</span>
+      <span class="museum-tech-chip">localStorage</span>
+      <span class="museum-tech-chip">IndexedDB</span>
+    </div>
+  </section>
+
+  <!-- Future Wing -->
+  <section class="museum-section">
+    <h2 class="museum-section-title">🔮 Future Wing</h2>
+    <p class="museum-future-note">Multi-vault support, encrypted backups, biometric unlock, calendar heatmap, tags — see the About page for the full roadmap.</p>
+  </section>
+</div>
+
+<!-- ============================================================ -->
+<!-- PUZZLE WORKSHOP — paste anywhere inside attic.html            -->
+<!-- (alongside your other room screens, e.g. after Founders Hall) -->
+<!-- ============================================================ -->
+
+<!-- Screen 1: source toggle + image picker -->
+<div id="atticPuzzleHubScreen" class="attic-hidden puzzle-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Back to Attic</button>
+  <h1 class="attic-hub-title">Puzzle Workshop</h1>
+  <p class="attic-hub-subtitle">Pick an image to piece together.</p>
+
+  <div class="puzzle-source-toggle">
+    <button id="puzzleSourcePhotosBtn" class="puzzle-toggle-btn active" onclick="setPuzzleSource('photos')">Your Photos</button>
+    <button id="puzzleSourcePacksBtn" class="puzzle-toggle-btn" onclick="setPuzzleSource('packs')">Built-in Packs</button>
+  </div>
+
+  <div id="puzzlePackPills" class="puzzle-pack-pills attic-hidden"></div>
+
+  <div id="puzzleImageGrid" class="puzzle-image-grid"></div>
+</div>
+
+<!-- Screen 2: grid size picker -->
+<div id="atticPuzzleSizeScreen" class="attic-hidden puzzle-screen">
+  <button class="attic-back-btn" onclick="backToPuzzleHub()">← Choose a different image</button>
+  <h1 class="attic-hub-title">Pick a difficulty</h1>
+
+  <img id="puzzleSizePreviewImg" class="puzzle-size-preview" alt="Selected puzzle image">
+
+  <div class="puzzle-size-grid">
+    <button class="puzzle-size-btn" onclick="startPuzzleGame(3)">
+      <span class="puzzle-size-label">3 × 3</span><span class="puzzle-size-sub">Easy</span>
+    </button>
+    <button class="puzzle-size-btn" onclick="startPuzzleGame(4)">
+      <span class="puzzle-size-label">4 × 4</span><span class="puzzle-size-sub">Intermediate</span>
+    </button>
+    <button class="puzzle-size-btn" onclick="startPuzzleGame(5)">
+      <span class="puzzle-size-label">5 × 5</span><span class="puzzle-size-sub">Hard</span>
+    </button>
+    <button class="puzzle-size-btn" onclick="startPuzzleGame(6)">
+      <span class="puzzle-size-label">6 × 6</span><span class="puzzle-size-sub">Very Hard</span>
+    </button>
+  </div>
+</div>
+
+<!-- Screen 3: the puzzle itself -->
+<div id="atticPuzzleGameScreen" class="attic-hidden puzzle-screen">
+  <button class="attic-back-btn" onclick="handlePuzzleNewGame()">← New Game</button>
+
+  <div class="puzzle-game-stats">
+    <span id="puzzleMoveCount">Moves: 0</span>
+    <span id="puzzleTimer">0:00</span>
+  </div>
+
+  <div id="puzzleBoardWrap" class="puzzle-board-wrap">
+    <div id="puzzleBoard" class="puzzle-board"></div>
+    <div id="puzzlePeekOverlay" class="puzzle-peek-overlay attic-hidden"></div>
+  </div>
+
+  <p id="puzzleResultBanner" class="puzzle-result-banner attic-hidden"></p>
+
+  <div class="puzzle-controls">
+    <button class="puzzle-ctrl-btn" onclick="handlePuzzleRestart()">🔄 Restart</button>
+    <button id="puzzleUndoBtn" class="puzzle-ctrl-btn" onclick="handlePuzzleUndo()">↩️ Undo</button>
+    <button id="puzzleHintBtn" class="puzzle-ctrl-btn" onclick="handlePuzzleHint()">💡 Hint</button>
+    <button
+      id="puzzlePeekBtn"
+      class="puzzle-ctrl-btn"
+      onmousedown="showPuzzlePeek()" onmouseup="hidePuzzlePeek()" onmouseleave="hidePuzzlePeek()"
+      ontouchstart="showPuzzlePeek(event)" ontouchend="hidePuzzlePeek(event)"
+    >👁️ Peek</button>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- GAME ARCADE — paste anywhere inside attic.html                -->
+<!-- ============================================================ -->
+
+<!-- Arcade hub: pick a game -->
+<div id="atticArcadeHubScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="showAtticHub()">← Back to Attic</button>
+  <h1 class="attic-hub-title">Game Arcade</h1>
+  <p class="attic-hub-subtitle">Pick a game.</p>
+
+  <div class="arcade-game-grid">
+    <div class="arcade-game-card" onclick="startMemoryFalls()">
+      <span class="arcade-game-icon">🔤</span>
+      <span class="arcade-game-name">Memory Falls</span>
+      <span class="arcade-game-desc">Type the falling words before they land.</span>
+    </div>
+    <div class="arcade-game-card" onclick="showArcadeHub(); document.getElementById('atticArcadeHubScreen').classList.add('attic-hidden'); document.getElementById('atticEchoMatchHubScreen').classList.remove('attic-hidden');">
+  <span class="arcade-game-icon">🎴</span>
+  <span class="arcade-game-name">Echo Match</span>
+  <span class="arcade-game-desc">Flip cards, find the pairs.</span>
+</div>
+
+<div class="arcade-game-card" onclick="showArcadeStreakKeeper()">
+  <span class="arcade-game-icon">🔥</span>
+  <span class="arcade-game-name">Streak Keeper</span>
+  <span class="arcade-game-desc">Jump the gaps, chase the flame.</span>
+</div>
+
+<div class="arcade-game-card" onclick="showArcadeHub(); document.getElementById('atticArcadeHubScreen').classList.add('attic-hidden'); document.getElementById('atticWhackHubScreen').classList.remove('attic-hidden'); showWhackHub();">
+  <span class="arcade-game-icon">🎯</span>
+  <span class="arcade-game-name">Memory Whack-a-Mole</span>
+  <span class="arcade-game-desc">Tap the right memories.</span>
+</div>
+
+<div class="arcade-game-card" onclick="startMemoryMaze()">
+  <span class="arcade-game-icon">🕯️</span>
+  <span class="arcade-game-name">Memory Maze</span>
+  <span class="arcade-game-desc">Wind through the maze, gather memories, evolve.</span>
+</div>
+
+<div class="arcade-game-card" onclick="startVaultGuardian()">
+  <span class="arcade-game-icon">🛡️</span>
+  <span class="arcade-game-name">Vault Guardian</span>
+  <span class="arcade-game-desc">Defend the vault from the Forgetting.</span>
+</div>
+
+
+  </div>
+</div>
+
+<!-- Memory Falls -->
+<div id="atticMemoryFallsScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="exitMemoryFalls()">← Back to Arcade</button>
+
+  <div class="mf-hud">
+    <span id="mfLives" class="mf-hud-item"></span>
+    <span id="mfLevel" class="mf-hud-item">Level 1</span>
+    <span id="mfTimer" class="mf-hud-item">0:00</span>
+  </div>
+  <div class="mf-speed-meter-track">
+    <div id="mfSpeedMeterFill" class="mf-speed-meter-fill"></div>
+  </div>
+
+  <div id="mfGameArea" class="mf-game-area">
+    <div id="mfStartOverlay" class="mf-overlay">
+      <h2>Memory Falls</h2>
+      <p>Type each word before it hits the bottom.</p>
+      <button class="mf-primary-btn" onclick="beginMemoryFallsRun()">Start</button>
+    </div>
+    <div id="mfGameOverOverlay" class="mf-overlay attic-hidden">
+      <h2>Game Over</h2>
+      <p id="mfFinalStats"></p>
+      <button class="mf-primary-btn" onclick="beginMemoryFallsRun()">Play Again</button>
+      <button class="mf-secondary-btn" onclick="exitMemoryFalls()">Back to Arcade</button>
+    </div>
+    <div id="mfLevelUpBanner" class="mf-level-up-banner attic-hidden"></div>
+  </div>
+<input id="mfHiddenInput" class="mf-hidden-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text">
+
+</div>
+
+<!-- ============================================================ -->
+<!-- ECHO MATCH — paste anywhere inside attic.html                 -->
+<!-- ============================================================ -->
+
+<div id="atticEchoMatchHubScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="showArcadeHub()">← Back to Arcade</button>
+  <h1 class="attic-hub-title">Echo Match</h1>
+  <p class="attic-hub-subtitle">Flip cards, find the pairs.</p>
+
+  <div class="em-size-grid">
+    <button class="em-size-btn" onclick="startEchoMatch(4)">
+      <span class="em-size-label">4 × 4</span><span class="em-size-sub">Easy</span>
+    </button>
+    <button class="em-size-btn" onclick="startEchoMatch(6)">
+      <span class="em-size-label">6 × 6</span><span class="em-size-sub">Hard</span>
+    </button>
+  </div>
+</div>
+
+<div id="atticEchoMatchGameScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="exitEchoMatch()">← Back to Echo Match</button>
+
+  <div class="em-hud">
+    <span id="emMoves" class="mf-hud-item">Moves: 0</span>
+    <span id="emTimer" class="mf-hud-item">0:00</span>
+    <span id="emBest" class="mf-hud-item"></span>
+  </div>
+
+  <div id="emGrid" class="em-grid"></div>
+
+  <div id="emWinOverlay" class="mf-overlay attic-hidden">
+    <h2>Solved! 🎉</h2>
+    <p id="emFinalStats"></p>
+    <button class="mf-primary-btn" onclick="startEchoMatch(emState.gridSize)">Play Again</button>
+    <button class="mf-secondary-btn" onclick="exitEchoMatch()">Back to Arcade</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MEMORY WHACK-A-MOLE — paste anywhere inside attic.html        -->
+<!-- ============================================================ -->
+
+<div id="atticWhackHubScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="showArcadeHub()">← Back to Arcade</button>
+  <h1 class="attic-hub-title">Memory Whack-a-Mole</h1>
+  <p class="attic-hub-subtitle">Pick your target — tap those, skip the rest.</p>
+
+  <div class="wm-target-toggle">
+    <button id="wmTargetFavBtn" class="puzzle-toggle-btn active" onclick="setWhackTargetMode('favourite')">⭐ Favourites</button>
+    <button id="wmTargetCatBtn" class="puzzle-toggle-btn" onclick="setWhackTargetMode('category')">🏷️ Category</button>
+  </div>
+
+  <select id="wmCategorySelect" class="wm-category-select attic-hidden"></select>
+
+  <p id="wmNotEnoughNote" class="puzzle-empty-note attic-hidden"></p>
+  <button id="wmStartBtn" class="mf-primary-btn wm-start-btn" onclick="startWhackAMole()">Start (30s)</button>
+</div>
+
+<div id="atticWhackGameScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="exitWhackAMole()">← Back to Whack-a-Mole</button>
+
+  <div class="mf-hud">
+    <span id="wmScore" class="mf-hud-item">Score: 0</span>
+    <span id="wmTimeLeft" class="mf-hud-item">30s</span>
+    <span id="wmBest" class="mf-hud-item"></span>
+  </div>
+
+  <div id="wmGrid" class="wm-grid"></div>
+
+  <div id="wmResultOverlay" class="mf-overlay attic-hidden">
+    <h2>Time's Up!</h2>
+    <p id="wmFinalStats"></p>
+    <button class="mf-primary-btn" onclick="exitWhackAMole()">Back</button>
+  </div>
+</div>
+
+<!-- Memory Maze -->
+<div id="atticMemoryMazeScreen" class="attic-hidden mm-screen">
+  <button class="attic-back-btn" onclick="exitMemoryMaze()">← Back to Arcade</button>
+
+  <div class="mm-hud">
+    <span class="mm-hud-item">Level <span id="mmLevelNum">1</span>/5</span>
+    <span class="mm-hud-item">⏱️ <span id="mmTimer">90</span>s</span>
+    <span class="mm-hud-item">❤️ <span id="mmLives">3</span></span>
+    <span class="mm-hud-item">🧠 <span id="mmCollected">0</span>/<span id="mmNeeded">4</span></span>
+    <span class="mm-hud-item mm-hud-sprite" id="mmSpriteDisplay">🕯️</span>
+  </div>
+
+  <canvas id="mmCanvas" class="mm-canvas"></canvas>
+
+  <div class="mm-dpad">
+    <div></div>
+    <button class="mm-dpad-btn" onclick="mmMove('up')">▲</button>
+    <div></div>
+    <button class="mm-dpad-btn" onclick="mmMove('left')">◀</button>
+    <div></div>
+    <button class="mm-dpad-btn" onclick="mmMove('right')">▶</button>
+    <div></div>
+    <button class="mm-dpad-btn" onclick="mmMove('down')">▼</button>
+    <div></div>
+  </div>
+
+  <div id="mmLevelUpOverlay" class="mm-overlay attic-hidden">
+    <p class="mm-levelup-sprite" id="mmLevelUpSprite">🔥</p>
+    <h2>Level Cleared!</h2>
+    <p id="mmLevelUpText"></p>
+  </div>
+
+  <div id="mmGameOverOverlay" class="mm-overlay attic-hidden">
+    <h2 id="mmGameOverTitle">Run Over</h2>
+    <p id="mmGameOverStats"></p>
+    <button class="mf-primary-btn" onclick="startMemoryMaze()">Try Again</button>
+    <button class="mf-secondary-btn" onclick="exitMemoryMaze()">Back to Arcade</button>
+  </div>
+</div>
+
+<!-- Vault Guardian -->
+<div id="atticVaultGuardianScreen" class="attic-hidden vg-screen">
+  <button class="attic-back-btn" onclick="exitVaultGuardian()">← Back to Arcade</button>
+
+  <div class="vg-hud">
+    <span class="vg-hud-item">Wave <span id="vgWaveNum">1</span></span>
+    <span class="vg-hud-item">❤️ <span id="vgLives">10</span></span>
+    <span class="vg-hud-item">💰 <span id="vgCurrency">60</span></span>
+  </div>
+
+  <canvas id="vgCanvas" class="vg-canvas"></canvas>
+
+  <div id="vgTowerShop" class="vg-shop">
+    <p class="vg-shop-label">Towers</p>
+    <div class="vg-shop-row" id="vgTowerButtons"></div>
+    <p class="vg-shop-label">Abilities</p>
+    <div class="vg-shop-row" id="vgAbilityButtons"></div>
+  </div>
+
+  <button id="vgStartWaveBtn" class="mf-primary-btn" onclick="vgStartNextWave()">Start Wave 1</button>
+
+  <div id="vgStartOverlay" class="mf-overlay">
+    <h2>Vault Guardian</h2>
+    <p>Place towers, cast abilities, and defend the vault from the Forgetting.</p>
+    <button class="mf-primary-btn" onclick="beginVaultGuardianRun()">Start</button>
+  </div>
+
+  <div id="vgGameOverOverlay" class="mf-overlay attic-hidden">
+    <h2 id="vgGameOverTitle">The Vault Has Faded</h2>
+    <p id="vgGameOverStats"></p>
+    <button class="mf-primary-btn" onclick="beginVaultGuardianRun()">Try Again</button>
+    <button class="mf-secondary-btn" onclick="exitVaultGuardian()">Back to Arcade</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- STREAK KEEPER — paste anywhere inside attic.html              -->
+<!-- ============================================================ -->
+
+<div id="atticStreakKeeperScreen" class="attic-hidden arcade-screen">
+  <button class="attic-back-btn" onclick="exitStreakKeeper()">← Back to Arcade</button>
+
+  <div class="mf-hud">
+    <span id="skDistance" class="mf-hud-item">0m</span>
+    <span id="skScore" class="mf-hud-item">Score: 0</span>
+    <span id="skBest" class="mf-hud-item"></span>
+  </div>
+
+  <div id="skGameWrap" class="sk-game-wrap">
+    <canvas id="skCanvas" class="sk-canvas"></canvas>
+    <div id="skEvolveBanner" class="sk-evolve-banner attic-hidden"></div>
+    <div id="skStartOverlay" class="mf-overlay">
+      <h2>Streak Keeper</h2>
+      <p>Tap or press Space to jump over the gaps. Collect orbs along the way.</p>
+      <button class="mf-primary-btn" onclick="beginStreakKeeperRun()">Start</button>
+    </div>
+    <div id="skGameOverOverlay" class="mf-overlay attic-hidden">
+      <h2>Run Over</h2>
+      <p id="skFinalStats"></p>
+      <button class="mf-primary-btn" onclick="beginStreakKeeperRun()">Run Again</button>
+      <button class="mf-secondary-btn" onclick="exitStreakKeeper()">Back to Arcade</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MUSIC CORNER — paste anywhere inside attic.html               -->
+<!-- ============================================================ -->
+
+<div id="atticMusicCornerScreen" class="attic-hidden music-corner-screen">
+  <button class="attic-back-btn" onclick="exitMusicCorner()">← Back to Attic</button>
+  <h1 class="attic-hub-title">Music Corner</h1>
+  <p class="attic-hub-subtitle">Your own voices, played back.</p>
+
+  <canvas id="mcVisualizerCanvas" class="mc-visualizer-canvas"></canvas>
+
+  <div id="mcNowPlaying" class="mc-now-playing">Nothing playing</div>
+
+  <div class="mc-player-controls">
+    <button class="mc-ctrl-btn" onclick="playPrevMixtapeTrack()">⏮️</button>
+    <button id="mcPlayPauseBtn" class="mc-ctrl-btn mc-play-btn" onclick="toggleMixtapePlayPause()">▶️</button>
+    <button class="mc-ctrl-btn" onclick="playNextMixtapeTrack()">⏭️</button>
+  </div>
+
+  <div id="mcTrackList" class="mc-track-list"></div>
+
+  <div class="mc-import-section">
+    <h2 class="mc-import-title">🎵 Import Tracks to Your Website</h2>
+    <p class="mc-import-note">Spend Attic Currency to unlock any track for use on your main site.</p>
+    <p class="mc-import-balance">Balance: <span id="mcImportBalance">0</span> 🪙</p>
+    <div id="mcImportTrackList" class="mc-import-track-list"></div>
+  </div>
+  
+</div>
+
+<!-- Bury Setup Modal -->
+<div id="burySetupModal" class="hidden attic-modal-backdrop">
+  <div class="attic-modal-card">
+    <button class="attic-back-btn" onclick="closeBurySetup()">← Cancel</button>
+    <h3>Choose a memory to bury</h3>
+    <div class="bury-mode-toggle">
+      <button type="button" id="buryModeExistingBtn" class="bury-mode-btn selected" onclick="setBuryMode('existing')">📜 Existing memory</button>
+      <button type="button" id="buryModeNewBtn" class="bury-mode-btn" onclick="setBuryMode('new')">✍️ Write new</button>
+    </div>
+    <div id="buryMemoryPicker" class="memory-picker-list"></div>
+    <div id="buryNewMemoryForm" class="hidden">
+      <input type="text" id="buryNewTitle" placeholder="Give it a name...">
+      <textarea id="buryNewDescription" placeholder="What do you want to bury?"></textarea>
+      <button type="button" class="confirm-btn" onclick="useNewBuryMemory()">Use this memory</button>
+    </div>
+    <div id="buryDurationSection" class="hidden">
+      <h3>How long should it stay buried?</h3>
+      <div class="duration-options">
+        <button onclick="selectBuryDuration('1m', this)">1 month</button>
+        <button onclick="selectBuryDuration('3m', this)">3 months</button>
+        <button onclick="selectBuryDuration('6m', this)">6 months</button>
+        <button onclick="selectBuryDuration('1y', this)">1 year</button>
+        <button onclick="selectBuryDuration('custom', this)">Choose a date</button>
+      </div>
+      
+      <input type="date" id="buryCustomDate" class="hidden">
+      <h3>A few last words? (optional)</h3>
+      <button id="buryVoiceBtn" onclick="toggleFarewellRecording()">🎙️ Record a farewell</button>
+      <div id="buryVoiceStatus"></div>
+      <audio id="buryVoicePreview" controls class="hidden"></audio>
+      <button id="confirmBuryBtn" class="confirm-btn" onclick="confirmBury()">Bury it</button>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Send Compose Modal -->
+<div id="sendComposeModal" class="hidden attic-modal-backdrop">
+  <div class="attic-modal-card">
+    <button class="attic-back-btn" onclick="closeSendCompose()">← Cancel</button>
+    <h3>Write to your future self</h3>
+    <textarea id="sendMessageText" placeholder="What do you want future-you to know?"></textarea>
+
+    <div id="sendPhotoSlot" class="send-photo-slot" onclick="document.getElementById('sendPhotoInput').click()">
+      <span id="sendPhotoPlaceholder">📷 Add a photo (optional)</span>
+      <img id="sendPhotoPreview" class="hidden">
+      <button type="button" id="sendPhotoRemoveBtn" class="send-photo-remove hidden" onclick="removeSendPhoto(event)">✕</button>
+    </div>
+    <input type="file" id="sendPhotoInput" accept="image/*" class="hidden" onchange="handleSendPhotoChange(event)">
+
+    <button id="sendVoiceBtn" onclick="toggleFutureVoiceRecording()">🎙️ Add a voice note (optional)</button>
+    
+    <div id="sendVoiceStatus"></div>
+    <audio id="sendVoicePreview" controls class="hidden"></audio>
+    <h3>When should it arrive?</h3>
+    
+    <div class="duration-options">
+      <button onclick="selectSendDuration('1m', this)">1 month</button>
+      <button onclick="selectSendDuration('3m', this)">3 months</button>
+      <button onclick="selectSendDuration('6m', this)">6 months</button>
+      <button onclick="selectSendDuration('1y', this)">1 year</button>
+      <button onclick="selectSendDuration('custom', this)">Choose a date</button>
+    </div>
+    
+    <input type="date" id="sendCustomDate" class="hidden">
+    <button id="confirmSendBtn" class="confirm-btn" onclick="confirmSendToFuture()">Send it</button>
+  </div>
+</div>
+
+<!-- Arrival / Resurface Reveal -->
+<div id="timeChamberRevealModal" class="hidden attic-modal-backdrop">
+  <div class="attic-modal-card reveal-content" id="timeChamberRevealContent"></div>
+  <button class="confirm-btn" onclick="closeTimeChamberReveal()">Close</button>
+</div>
+
+
+<!-- Floating music controls — a fixed sibling of every Attic screen, always visible while attic-active -->
+<div id="atticMusicControlBar" class="attic-music-control-bar">
+  <button id="atticMusicPlayPauseBtn" class="attic-music-ctrl-btn" onclick="toggleAtticMusicPlayPause()">⏸️</button>
+  <button id="atticMusicMuteBtn" class="attic-music-ctrl-btn" onclick="toggleAtticMusicMute()">🔊</button>
+  <input id="atticMusicVolumeSlider" class="attic-music-volume-slider" type="range" min="0" max="100" value="45" oninput="setAtticMusicVolume(this.value)">
+</div>

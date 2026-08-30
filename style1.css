@@ -1,0 +1,1045 @@
+body {
+    font-family: system-ui, sans-serif;
+}
+
+.nav-link {
+    display: inline-block;
+    padding-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-active {
+    color: #22d3ee;
+    border-bottom: 3px solid #22d3ee;
+}
+
+body[data-accent="purple"] .nav-active { color: var(--accent-400) !important; border-bottom-color: var(--accent-400) !important; }
+body[data-accent="green"] .nav-active { color: var(--accent-400) !important; border-bottom-color: var(--accent-400) !important; }
+body[data-accent="pink"] .nav-active { color: var(--accent-400) !important; border-bottom-color: var(--accent-400) !important; }
+body[data-accent="orange"] .nav-active { color: var(--accent-400) !important; border-bottom-color: var(--accent-400) !important; }
+
+html {
+    scroll-behavior: smooth;
+}
+.fade-in {
+    animation: fadeIn 0.35s ease;
+    animation-fill-mode: both;
+}
+
+.stagger-1 {
+    animation-delay: 0.05s;
+}
+
+.stagger-2 {
+    animation-delay: 0.10s;
+}
+
+.stagger-3 {
+    animation-delay: 0.15s;
+}
+.stagger-4 {
+    animation-delay: 0.20s;
+}
+
+.stagger-5 {
+    animation-delay: 0.25s;
+}
+
+@keyframes fadeIn {
+
+from{
+    opacity:0;
+    transform:translateY(15px);
+}
+
+to{
+    opacity:1;
+    transform:translateY(0);
+}
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+button {
+    transition: all 0.15s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: scale(.96);
+}
+
+#togglePin,
+#togglePin:hover,
+#togglePin:active {
+    transform: none !important;
+    transition: none !important;
+}
+
+.memory-card {
+    transition: all .3s ease;
+}
+
+.memory-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 25px rgba(34,211,238,.2);
+}
+.memory-card img {
+    transition: transform .4s ease;
+}
+
+.memory-card:hover img {
+    transform: scale(1.03);
+}
+.modal-content {
+    animation: modalPop 0.28s ease;
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body[data-font-size="small"] {
+    font-size: 12px;
+}
+
+body[data-font-size="medium"] {
+    font-size: 14px;
+}
+
+body[data-font-size="large"] {
+    font-size: 17px;
+}
+
+/* Keep form fields at a readable, zoom-safe size regardless of the
+   accessibility Font Size setting above — inputs under 16px trigger
+   an automatic zoom-in on iOS Safari whenever they're tapped. */
+input, textarea, select {
+    font-size: 16px;
+}
+
+
+/* ===== Accent Color System ===== */
+
+body[data-accent="purple"] {
+    --accent-300: #d8b4fe;
+    --accent-400: #c084fc;
+    --accent-500: #a855f7;
+    --accent-600: #9333ea;
+    --accent-900: #581c87;
+}
+
+body[data-accent="green"] {
+    --accent-300: #6ee7b7;
+    --accent-400: #34d399;
+    --accent-500: #10b981;
+    --accent-600: #059669;
+    --accent-900: #064e3b;
+}
+
+body[data-accent="pink"] {
+    --accent-300: #fda4af;
+    --accent-400: #fb7185;
+    --accent-500: #f43f5e;
+    --accent-600: #e11d48;
+    --accent-900: #881337;
+}
+
+body[data-accent="orange"] {
+    --accent-300: #fcd34d;
+    --accent-400: #fbbf24;
+    --accent-500: #f59e0b;
+    --accent-600: #d97706;
+    --accent-900: #78350f;
+}
+
+
+
+body[data-accent]:not([data-accent="cyan"]) .text-cyan-300 { color: var(--accent-300) !important; }
+body[data-accent]:not([data-accent="cyan"]) .text-cyan-400 { color: var(--accent-400) !important; }
+body[data-accent]:not([data-accent="cyan"]) .text-cyan-500 { color: var(--accent-500) !important; }
+
+body[data-accent]:not([data-accent="cyan"]) .bg-cyan-400 { background-color: var(--accent-400) !important; }
+body[data-accent]:not([data-accent="cyan"]) .bg-cyan-500 { background-color: var(--accent-500) !important; }
+body[data-accent]:not([data-accent="cyan"]) .bg-cyan-600 { background-color: var(--accent-600) !important; }
+body[data-accent]:not([data-accent="cyan"]) .bg-cyan-900 { background-color: var(--accent-900) !important; }
+
+body[data-accent]:not([data-accent="cyan"]) .border-cyan-500 { border-color: var(--accent-500) !important; }
+
+body[data-accent]:not([data-accent="cyan"]) .hover\:bg-cyan-400:hover { background-color: var(--accent-400) !important; }
+body[data-accent]:not([data-accent="cyan"]) .hover\:bg-cyan-500:hover { background-color: var(--accent-500) !important; }
+body[data-accent]:not([data-accent="cyan"]) .hover\:text-cyan-300:hover { color: var(--accent-300) !important; }
+body[data-accent]:not([data-accent="cyan"]) .hover\:text-cyan-400:hover { color: var(--accent-400) !important; }
+body[data-accent]:not([data-accent="cyan"]) .hover\:border-cyan-500:hover { border-color: var(--accent-500) !important; }
+body[data-accent]:not([data-accent="cyan"]) .focus\:border-cyan-500:focus { border-color: var(--accent-500) !important; }
+body[data-accent]:not([data-accent="cyan"]) .from-cyan-500 { --tw-gradient-from: var(--accent-500) !important; --tw-gradient-to: rgb(255 255 255 / 0) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+
+
+/* ===================================================
+   DAY 3: MOBILE TOUCH & ZOOM FIXES
+   =================================================== */
+
+/* 1. Remove the default tap highlight on mobile (the gray flash) */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent selection on ALL UI elements */
+button, a, .nav-link, .pin-btn, .mood-btn, .theme-btn, [onclick] {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* But allow selection on memory text content */
+.memory-card p,
+.memory-card h3,
+#modalDescription,
+#memoryViewerContent p,
+#timelineList p {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* Prevent image selection on long-press */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+    pointer-events: auto;
+}
+
+
+/* 3. Remove the 300ms click delay on mobile */
+button,
+a,
+.pin-btn,
+.mood-btn,
+.theme-btn,
+[onclick] {
+    touch-action: manipulation;
+}
+
+/* 4. Prevent zoom on double-tap (but allow pinch zoom) */
+input,
+textarea,
+select {
+    font-size: 16px; /* You already have this — keeping it */
+    touch-action: manipulation;
+}
+
+/* 5. Disable long-press context menu on UI elements (optional) */
+button,
+a {
+    -webkit-touch-callout: none;
+}
+
+/* 6. Prevent zoom on input focus (iOS Safari) */
+input:focus,
+textarea:focus,
+select:focus {
+    font-size: 16px !important;
+}
+
+
+/* Achievement category colors — intentionally independent of the
+   accent theme system, so category identity stays fixed no matter
+   which accent color is selected in Settings. */
+
+.ach-border-memory   { border-color: #06b6d4 !important; }
+.ach-icon-memory      { background-color: rgba(6, 182, 212, 0.2) !important; }
+.ach-text-memory      { color: #22d3ee !important; }
+
+.ach-border-writing   { border-color: #8b5cf6 !important; }
+.ach-icon-writing      { background-color: rgba(139, 92, 246, 0.2) !important; }
+.ach-text-writing      { color: #a78bfa !important; }
+
+.ach-border-story      { border-color: #fbbf24 !important; }
+.ach-icon-story         { background-color: rgba(251, 191, 36, 0.2) !important; }
+.ach-text-story         { color: #fcd34d !important; }
+
+.ach-border-streak     { border-color: #f97316 !important; }
+.ach-icon-streak        { background-color: rgba(249, 115, 22, 0.2) !important; }
+.ach-text-streak        { color: #fb923c !important; }
+
+.ach-border-explorer   { border-color: #14b8a6 !important; }
+.ach-icon-explorer       { background-color: rgba(20, 184, 166, 0.2) !important; }
+.ach-text-explorer       { color: #2dd4bf !important; }
+
+.ach-border-time       { border-color: #6366f1 !important; }
+.ach-icon-time          { background-color: rgba(99, 102, 241, 0.2) !important; }
+.ach-text-time          { color: #818cf8 !important; }
+
+.ach-border-category   { border-color: #10b981 !important; }
+.ach-icon-category       { background-color: rgba(16, 185, 129, 0.2) !important; }
+.ach-text-category       { color: #34d399 !important; }
+
+.ach-border-secret     { border-color: #d946ef !important; }
+.ach-icon-secret        { background-color: rgba(217, 70, 239, 0.2) !important; }
+.ach-text-secret        { color: #e879f9 !important; }
+
+.ach-toast-memory   { border-color: #06b6d4 !important; box-shadow: 0 25px 50px -12px rgba(6, 182, 212, 0.4) !important; }
+.ach-toast-writing  { border-color: #8b5cf6 !important; box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.4) !important; }
+.ach-toast-story    { border-color: #fbbf24 !important; box-shadow: 0 25px 50px -12px rgba(251, 191, 36, 0.4) !important; }
+.ach-toast-streak   { border-color: #f97316 !important; box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.4) !important; }
+.ach-toast-explorer { border-color: #14b8a6 !important; box-shadow: 0 25px 50px -12px rgba(20, 184, 166, 0.4) !important; }
+.ach-toast-time     { border-color: #6366f1 !important; box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.4) !important; }
+.ach-toast-category { border-color: #10b981 !important; box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.4) !important; }
+.ach-toast-secret   { border-color: #d946ef !important; box-shadow: 0 25px 50px -12px rgba(217, 70, 239, 0.4) !important; }
+#mobileMenu .nav-link.nav-active {
+    border-color: #22d3ee !important;
+    color: #22d3ee !important;
+    border-bottom-width: 1px !important;
+}
+
+
+
+
+
+
+/* PLAYFUL MODE - activated by body.playful-mode */
+body.playful-mode {
+    font-family: 'Fredoka', 'Nunito', system-ui !important;
+    background: #FFF8E7 !important;
+    color: #2d2d2d !important;
+}
+body.playful-mode .bg-zinc-950 { background: #FFF8E7 !important; }
+body.playful-mode .bg-zinc-900 {
+    background: white !important;
+    border: 3px solid #1a1a1a !important;
+    border-radius: 32px !important;
+    box-shadow: 6px 6px 0px #1a1a1a !important;
+}
+
+body.playful-mode .bg-zinc-900:not(nav):not(#toast):not(#achievementToast):nth-child(even) { transform: rotate(0.3deg); }
+body.playful-mode .bg-zinc-900:not(nav):not(#toast):not(#achievementToast):nth-child(odd) { transform: rotate(-0.3deg); }
+body.playful-mode .bg-zinc-900:not(nav):not(#toast):not(#achievementToast):hover {
+    transform: rotate(0deg) translateY(-2px) !important;
+    box-shadow: 8px 8px 0px #1a1a1a !important;
+}
+
+body.playful-mode .text-white { color: #1a1a1a !important; }
+body.playful-mode .text-zinc-400 { color: #6b7280 !important; }
+body.playful-mode .border-zinc-700 { border-color: #1a1a1a !important; }
+body.playful-mode .bg-zinc-800 { background: #FFF4D6 !important; border: 2px solid #1a1a1a !important; }
+
+/* FIXED: Don't break nav and hamburger */
+body.playful-mode nav {
+    background: white !important;
+    border-bottom: 4px solid #1a1a1a !important;
+}
+body.playful-mode #mobileMenu {
+    background: white !important;
+    border: 3px solid #1a1a1a !important;
+    border-radius: 0 0 24px 24px !important;
+    margin-top: 8px !important;
+}
+body.playful-mode #menuButton {
+    border: 3px solid #1a1a1a !important;
+    border-radius: 12px !important;
+    background: #FFDE59 !important;
+    box-shadow: 3px 3px 0 #1a1a1a !important;
+}
+
+/* Buttons - but exclude toggle knob */
+body.playful-mode button:not(#playfulModeToggle):not(#playfulToggleKnob), body.playful-mode .bg-cyan-500 {
+    border-radius: 999px !important;
+    border: 3px solid #1a1a1a !important;
+    box-shadow: 4px 4px 0px #1a1a1a !important;
+    font-weight: 800 !important;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+body.playful-mode button:not(#playfulModeToggle):not(#playfulToggleKnob):hover {
+    transform: scale(1.03) !important;
+    box-shadow: 6px 6px 0px #1a1a1a !important;
+}
+body.playful-mode button:not(#playfulModeToggle):not(#playfulToggleKnob):active {
+    transform: scale(0.96) !important;
+    box-shadow: 2px 2px 0px #1a1a1a !important;
+}
+body.playful-mode .bg-cyan-500 { background: #FFDE59 !important; color: #1a1a1a !important; }
+body.playful-mode .bg-cyan-500:hover { background: #FFCC00 !important; }
+
+body.playful-mode .rounded-3xl { border-radius: 32px !important; }
+body.playful-mode .rounded-2xl { border-radius: 24px !important; }
+body.playful-mode input, body.playful-mode select {
+    border-radius: 999px !important;
+    border: 3px solid #1a1a1a !important;
+    background: white !important;
+    font-weight: 600 !important;
+}
+body.playful-mode #timelineList .border-l-4 {
+    border-left-width: 6px !important;
+    border-color: #FF6B9D !important;
+    border-radius: 24px !important;
+    background: white !important;
+    margin-left: 16px !important;
+    padding: 16px !important;
+    box-shadow: 4px 4px 0 #1a1a1a !important;
+}
+body.playful-mode::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 10% 20%, #FFD6E7 0%, transparent 20%),
+        radial-gradient(circle at 90% 30%, #C1F0FF 0%, transparent 20%),
+        radial-gradient(circle at 30% 80%, #FFEFB1 0%, transparent 25%),
+        radial-gradient(circle at 80% 85%, #D6FFD6 0%, transparent 20%);
+    opacity: 0.6;
+}
+
+/* =============== DOODLE NOTEBOOK MODE =============== */
+body.doodle-mode {
+    font-family: 'Patrick Hand', 'Nunito', cursive !important;
+    background: #FEFCF3 !important;
+    color: #2b2b2b !important;
+}
+body.doodle-mode .bg-zinc-950 { background: #FEFCF3 !important; background-image: linear-gradient(#E8E6E1 1px, transparent 1px); background-size: 100% 28px !important; }
+
+body.doodle-mode .bg-zinc-900:not(nav):not(#toast):not(#achievementToast) {
+    background: white !important;
+    border: 2px dashed #a8a29e !important;
+    border-radius: 4px 24px 8px 18px !important;
+    box-shadow: 4px 4px 0 #fef08a, 6px 6px 0 #1a1a1a !important;
+    transform: rotate(-0.8deg);
+}
+body.doodle-mode .bg-zinc-900:not(nav):not(#toast):not(#achievementToast):nth-child(even) { transform: rotate(0.6deg); }
+
+
+body.doodle-mode nav { background: #FEF9C3 !important; border-bottom: 3px dashed #1a1a1a !important; }
+body.doodle-mode .text-white { color: #1c1917 !important; }
+body.doodle-mode button { border: 2px solid #1a1a1a !important; border-radius: 8px 16px 12px 10px !important; background: #FEF08A !important; font-family: 'Patrick Hand' !important; }
+body.doodle-mode #menuButton { background: #FEF08A !important; }
+
+/* =============== OCEAN ADVENTURE MODE =============== */
+body.ocean-mode {
+    font-family: 'Nunito', system-ui !important;
+    background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 40%, #7DD3FC 100%) !important;
+    color: #0c4a6e !important;
+}
+body.ocean-mode .bg-zinc-950 { background: transparent !important; }
+body.ocean-mode .bg-zinc-900 {
+    background: rgba(255,255,255,0.85) !important;
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(14,165,233,0.3) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 8px 32px rgba(14,165,233,0.15), 0 0 0 1px rgba(255,255,255,0.8) inset !important;
+}
+body.ocean-mode nav { background: rgba(255,255,255,0.9) !important; backdrop-filter: blur(16px); border-bottom: 2px solid #7DD3FC !important; }
+body.ocean-mode .text-white { color: #0c4a6e !important; }
+body.ocean-mode .text-zinc-400 { color: #0369a1 !important; }
+body.ocean-mode .bg-cyan-500 { background: linear-gradient(135deg, #0EA5E9, #06B6D4) !important; color: white !important; border-radius: 999px !important; box-shadow: 0 4px 16px rgba(14,165,233,0.3) !important; }
+body.ocean-mode #menuButton { background: #E0F2FE !important; border: 2px solid #0EA5E9 !important; }
+body.ocean-mode::before {
+    content: '🫧 🐚 🌊 🐠 🫧'; position: fixed; bottom: 20px; left: 0; right: 0; text-align: center; font-size: 24px; opacity: 0.15; pointer-events: none; letter-spacing: 20px; animation: floatBubbles 20s linear infinite;
+}
+@keyframes floatBubbles { 0% { transform: translateY(0); } 100% { transform: translateY(-100vh); } }
+
+/* =============== RETRO ARCADE MODE =============== */
+body.retro-mode {
+    font-family: 'Press Start 2P', monospace !important;
+    background: #0f0f0f !important;
+    color: #00FF00 !important;
+    image-rendering: pixelated;
+}
+body.retro-mode .bg-zinc-950 { background: #0f0f0f !important; background-image: linear-gradient(rgba(0,255,0,0.03) 1px, transparent 1px); background-size: 100% 4px; }
+body.retro-mode .bg-zinc-900 {
+    background: #1a1a1a !important;
+    border: 4px solid #00FF00 !important;
+    border-radius: 0 !important;
+    box-shadow: 6px 6px 0 #00FF00 !important;
+    font-family: 'VT323', monospace !important;
+}
+body.retro-mode .bg-zinc-900 * { font-family: 'VT323', monospace !important; }
+body.retro-mode nav { background: #000 !important; border-bottom: 4px solid #00FF00 !important; border-radius: 0 !important; }
+body.retro-mode .text-white { color: #00FF00 !important; }
+body.retro-mode .text-zinc-400 { color: #00AA00 !important; }
+body.retro-mode .bg-cyan-500 { background: #00FF00 !important; color: #000 !important; border: 4px solid #00FF00 !important; border-radius: 0 !important; box-shadow: 4px 4px 0 #00AA00 !important; }
+body.retro-mode button { border-radius: 0 !important; }
+body.retro-mode #menuButton { background: #000 !important; border: 4px solid #00FF00 !important; color: #00FF00 !important; border-radius: 0 !important; }
+
+/* =============== SPACE EXPLORER MODE =============== */
+body.space-mode {
+    font-family: 'Space Grotesk', 'Nunito', sans-serif !important;
+    background: radial-gradient(ellipse at top, #1e1b4b 0%, #0f0a1e 50%, #000000 100%) !important;
+    color: #e0e7ff !important;
+}
+body.space-mode .bg-zinc-950 { background: transparent !important; }
+body.space-mode .bg-zinc-900 {
+    background: rgba(30,27,75,0.6) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(139,92,246,0.3) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 40px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+}
+body.space-mode nav { background: rgba(15,10,30,0.8) !important; backdrop-filter: blur(20px); border-bottom: 1px solid rgba(139,92,246,0.3) !important; }
+body.space-mode .text-white { color: #e0e7ff !important; }
+body.space-mode .text-zinc-400 { color: #a5b4fc !important; }
+body.space-mode .bg-cyan-500 { background: linear-gradient(135deg, #8B5CF6, #06B6D4) !important; box-shadow: 0 0 20px rgba(139,92,246,0.5) !important; border-radius: 999px !important; }
+body.space-mode::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+    background-image: radial-gradient(2px 2px at 20% 30%, #fff, transparent), radial-gradient(2px 2px at 40% 70%, #fff, transparent), radial-gradient(1px 1px at 90% 40%, #fff, transparent), radial-gradient(1px 1px at 60% 10%, #fff, transparent);
+    background-size: 550px 550px; opacity: 0.3;
+}
+
+/* =============== MATURE: MIDNIGHT LUXE =============== */
+body.midnight-mode {
+    font-family: 'Cormorant Garamond', serif !important;
+    background: #0a0a0a !important;
+    color: #f5f5f0 !important;
+}
+body.midnight-mode .bg-zinc-950 { background: #0a0a0a !important; }
+body.midnight-mode .bg-zinc-900 {
+    background: #141414 !important;
+    border: 1px solid #2a2a2a !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
+    border-left: 3px solid #D4AF37 !important;
+}
+body.midnight-mode nav { background: #0f0f0f !important; border-bottom: 1px solid #2a2a2a !important; }
+body.midnight-mode .text-white { color: #f5f5f0 !important; }
+body.midnight-mode .text-zinc-400 { color: #a0a0a0 !important; }
+body.midnight-mode .bg-cyan-500 { background: linear-gradient(135deg, #D4AF37, #B8941F) !important; color: #000 !important; border-radius: 8px !important; font-family: 'Cormorant Garamond' !important; letter-spacing: 1px; }
+
+/* =============== MATURE: ZEN MINIMAL =============== */
+body.zen-mode {
+    font-family: 'Inter', system-ui !important;
+    background: #FAF9F6 !important;
+    color: #2d2d2b !important;
+}
+body.zen-mode .bg-zinc-950 { background: #FAF9F6 !important; }
+body.zen-mode .bg-zinc-900 {
+    background: white !important;
+    border: 1px solid #E8E6E1 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+}
+body.zen-mode nav { background: rgba(250,249,246,0.8) !important; backdrop-filter: blur(12px); border-bottom: 1px solid #E8E6E1 !important; }
+body.zen-mode .text-white { color: #2d2d2b !important; }
+body.zen-mode .text-zinc-400 { color: #8a8a7e !important; }
+body.zen-mode .bg-cyan-500 { background: #2d2d2b !important; color: white !important; border-radius: 8px !important; }
+
+/* =============== MATURE: GLASS =============== */
+body.glass-mode {
+    font-family: 'Inter', system-ui !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: #1a1a1a !important;
+    min-height: 100vh;
+}
+body.glass-mode .bg-zinc-950 { background: transparent !important; }
+body.glass-mode .bg-zinc-900 {
+    background: rgba(255,255,255,0.7) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+}
+body.glass-mode nav { background: rgba(255,255,255,0.8) !important; backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.3) !important; }
+body.glass-mode .text-white { color: #1a1a1a !important; }
+body.glass-mode .bg-cyan-500 { background: rgba(0,0,0,0.8) !important; color: white !important; backdrop-filter: blur(10px); border-radius: 12px !important; }
+
+/* =============== MATURE: FOREST NIGHT =============== */
+body.forest-mode {
+    font-family: 'Instrument Serif', serif !important;
+    background: #0F1A0F !important;
+    color: #E8F0E8 !important;
+}
+body.forest-mode .bg-zinc-950 { background: #0F1A0F !important; background-image: radial-gradient(circle at 20% 30%, rgba(34,197,94,0.05) 0%, transparent 50%); }
+body.forest-mode .bg-zinc-900 {
+    background: #1A2E1A !important;
+    border: 1px solid #2D4A2D !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+body.forest-mode nav { background: #0F1A0F !important; border-bottom: 1px solid #2D4A2D !important; }
+body.forest-mode .text-white { color: #E8F0E8 !important; }
+body.forest-mode .bg-cyan-500 { background: #22C55E !important; color: #0F1A0F !important; border-radius: 8px !important; }
+
+/* =============== MATURE: EDITORIAL =============== */
+body.editorial-mode {
+    font-family: 'Newsreader', 'Georgia', serif !important;
+    background: #FFFEF9 !important;
+    color: #111 !important;
+}
+body.editorial-mode .bg-zinc-950 { background: #FFFEF9 !important; }
+body.editorial-mode .bg-zinc-900 {
+    background: white !important;
+    border: 1px solid #111 !important;
+    border-radius: 0 !important;
+    box-shadow: 4px 4px 0 #111 !important;
+}
+body.editorial-mode nav { background: white !important; border-bottom: 2px solid #111 !important; }
+body.editorial-mode .text-white { color: #111 !important; font-weight: 700 !important; }
+body.editorial-mode .bg-cyan-500 { background: #111 !important; color: white !important; border-radius: 0 !important; font-family: 'Newsreader' !important; text-transform: uppercase; letter-spacing: 1px; }
+
+
+/* FACEBOOK - CLEAN */
+body.facebook-mode { font-family: 'SF Pro Text', Helvetica, Arial, sans-serif !important; background: #f0f2f5 !important; color: #050505 !important; }
+body.facebook-mode .bg-zinc-950 { background: #f0f2f5 !important; }
+body.facebook-mode .bg-zinc-900 { background: #ffffff !important; border: 1px solid #dddfe2 !important; border-radius: 8px !important; box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important; }
+body.facebook-mode .bg-zinc-800 { background: #e4e6eb !important; }
+body.facebook-mode .text-white { color: #050505 !important; }
+body.facebook-mode .text-zinc-400 { color: #65676b !important; }
+body.facebook-mode .text-cyan-400 { color: #0866FF !important; }
+body.facebook-mode .bg-cyan-500 { background: #0866FF !important; color: #ffffff !important; }
+
+/* TIKTOK - NEON */
+body.tiktok-mode { font-family: 'Inter', system-ui, sans-serif !important; background: #000000 !important; color: #ffffff !important; }
+body.tiktok-mode .bg-zinc-950 { background: #000000 !important; }
+body.tiktok-mode .bg-zinc-900 { background: #121212 !important; border: 1px solid #2f2f2f !important; border-radius: 12px !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset !important; }
+body.tiktok-mode .text-cyan-400 { color: #25F4EE !important; }
+body.tiktok-mode .bg-cyan-500 { background: #FE2C55 !important; box-shadow: 0 2px 8px rgba(254,44,85,0.4) !important; }
+
+/* MINECRAFT - BLOCKY HIGH QUALITY */
+body.minecraft-mode { font-family: 'VT323', monospace !important; background: #6BCB77 !important; background-image: linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%) !important; background-size: 40px 40px !important; color: #000 !important; }
+body.minecraft-mode .bg-zinc-950 { background: transparent !important; }
+body.minecraft-mode .bg-zinc-900 { background: #C2B280 !important; border: 4px solid #5A3C1A !important; border-radius: 0 !important; box-shadow: 6px 6px 0 #000 !important; }
+body.minecraft-mode .bg-cyan-500 { background: #3B8526 !important; border: 3px solid #000 !important; border-radius: 0 !important; color: #fff !important; font-size: 18px !important; }
+
+/* GTA - NEON HIGH QUALITY */
+body.gta-mode { background: linear-gradient(135deg, #FF00CC 0%, #333399 50%, #00CCFF 100%) !important; color: #fff !important; font-family: 'Space Grotesk', sans-serif !important; }
+body.gta-mode .bg-zinc-950 { background: transparent !important; }
+body.gta-mode .bg-zinc-900 { background: rgba(0,0,0,0.85) !important; border: 2px solid #FF00CC !important; border-radius: 0 !important; box-shadow: 0 0 20px rgba(255,0,204,0.5) !important; }
+body.gta-mode .bg-cyan-500 { background: linear-gradient(90deg, #FF00CC, #00CCFF) !important; color: #000 !important; font-style: italic !important; font-weight: 900 !important; }
+body.gta-mode .text-cyan-400 { color: #FF00CC !important; text-shadow: 0 0 10px #FF00CC !important; }
+
+/* ROBLOX - ENHANCED HIGH QUALITY */
+body.roblox-mode { background: #E2231A !important; background-image: radial-gradient(circle at 20% 20%, #fff 2px, transparent 2.5px), radial-gradient(circle at 80% 80%, #fff 2px, transparent 2.5px) !important; background-size: 40px 40px !important; color: #000 !important; font-family: 'Fredoka', sans-serif !important; }
+body.roblox-mode .bg-zinc-950 { background: transparent !important; }
+body.roblox-mode .bg-zinc-900 { background: #ffffff !important; border: 4px solid #000000 !important; border-radius: 12px !important; box-shadow: 8px 8px 0 #000000 !important; position: relative; }
+body.roblox-mode .bg-zinc-900::after { content: '🧱 NOOB'; position: absolute; bottom: 6px; right: 10px; font-family: 'Press Start 2P', monospace; font-size: 9px; background: #E2231A; color: white; padding: 3px 6px; border: 2px solid #000; }
+body.roblox-mode .bg-cyan-500 { background: #000 !important; color: #fff !important; border: 3px solid #fff !important; box-shadow: 4px 4px 0 #000 !important; border-radius: 8px !important; font-weight: 800 !important; }
+body.roblox-mode nav { background: #fff !important; border-bottom: 4px solid #000 !important; }
+body.roblox-mode nav .text-white { color: #000 !important; }
+
+/* DBZ - HIGH QUALITY */
+body.dbz-mode { background: #FF8C00 !important; background-image: radial-gradient(circle at center, #FFCC00 0%, #FF8C00 40%, #FF4500 100%) !important; color: #000 !important; font-family: 'Bangers', 'Fredoka', cursive !important; }
+body.dbz-mode .bg-zinc-900 { background: #111 !important; border-left: 8px solid #FFCC00 !important; border-radius: 0 !important; color: #fff !important; box-shadow: 0 0 30px rgba(255,204,0,0.5) !important; }
+body.dbz-mode .bg-zinc-900 .text-white { color: #FFCC00 !important; font-family: 'Bangers' !important; letter-spacing: 1px !important; }
+body.dbz-mode .bg-cyan-500 { background: #FFCC00 !important; color: #000 !important; font-family: 'Bangers' !important; font-size: 20px !important; border: 3px solid #000 !important; }
+
+/* JJK - ENHANCED HIGH QUALITY */
+body.jjk-mode { background: #0a0a0f !important; color: #e0e0ff !important; font-family: 'Space Grotesk', sans-serif !important; background-image: radial-gradient(ellipse at 20% 30%, rgba(124,58,237,0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236,72,153,0.2) 0%, transparent 50%) !important; }
+body.jjk-mode .bg-zinc-950 { background: transparent !important; }
+body.jjk-mode .bg-zinc-900 { background: linear-gradient(180deg, #1a0a2e 0%, #0f0a1e 100%) !important; border: 1px solid #7c3aed !important; border-radius: 12px !important; box-shadow: 0 0 30px rgba(124,58,237,0.4), inset 0 1px 0 rgba(124,58,237,0.3) !important; position: relative; overflow: hidden; }
+body.jjk-mode .bg-zinc-900::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, rgba(124,58,237,0.1), transparent, rgba(236,72,153,0.1), transparent); animation: rotate 20s linear infinite; pointer-events: none; }
+body.jjk-mode .bg-zinc-900::after { content: '👁️ DOMAIN EXPANSION'; position: absolute; bottom: 6px; right: 10px; font-size: 9px; letter-spacing: 2px; color: #7c3aed; opacity: 0.6; font-weight: 700; }
+body.jjk-mode .bg-cyan-500 { background: linear-gradient(90deg, #7c3aed, #ec4899) !important; color: #fff !important; box-shadow: 0 0 20px rgba(124,58,237,0.6) !important; }
+body.jjk-mode .text-cyan-400 { color: #a78bfa !important; text-shadow: 0 0 10px #7c3aed !important; }
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+/* LOFI - HIGH QUALITY */
+body.lofi-mode { background: #F5E6CC !important; background-image: radial-gradient(circle at 20% 30%, rgba(166,124,82,0.1) 0%, transparent 50%) !important; color: #4a3f35 !important; font-family: 'Patrick Hand', cursive !important; }
+body.lofi-mode .bg-zinc-950 { background: transparent !important; }
+body.lofi-mode .bg-zinc-900 { background: #FFFBF0 !important; border: 1px solid #D4C4A8 !important; border-radius: 20px !important; box-shadow: 0 4px 20px rgba(74,63,53,0.1) !important; }
+body.lofi-mode .text-white { color: #4a3f35 !important; }
+body.lofi-mode .text-zinc-400 { color: #8a7d6b !important; }
+body.lofi-mode .bg-cyan-500 { background: #A67C52 !important; color: #fff !important; border-radius: 20px !important; }
+
+/* ONE PIECE - ENHANCED HIGH QUALITY */
+body.onepiece-mode { background: #00A8E8 !important; background-image: linear-gradient(180deg, #87CEEB 0%, #00A8E8 40%, #0077BE 100%) !important; color: #000 !important; font-family: 'Fredoka', 'Patrick Hand', sans-serif !important; }
+body.onepiece-mode .bg-zinc-950 { background: transparent !important; }
+body.onepiece-mode .bg-zinc-900 { background: #FFF8DC !important; background-image: linear-gradient(90deg, rgba(139,69,19,0.03) 1px, transparent 1px), linear-gradient(rgba(139,69,19,0.03) 1px, transparent 1px) !important; background-size: 20px 20px !important; border: 3px solid #8B4513 !important; border-radius: 16px !important; box-shadow: 0 6px 0 #8B4513, 0 8px 20px rgba(0,0,0,0.2) !important; position: relative; }
+body.onepiece-mode .bg-zinc-900::before { content: '☠️'; position: absolute; top: 8px; right: 12px; font-size: 20px; opacity: 0.8; }
+body.onepiece-mode .bg-zinc-900::after { content: '🏴‍☠️ STRAW HAT CREW'; position: absolute; bottom: 6px; right: 10px; font-size: 9px; font-weight: 800; letter-spacing: 1px; background: #D32F2F; color: #FFF8DC; padding: 2px 6px; border-radius: 4px; border: 1px solid #8B4513; }
+body.onepiece-mode .bg-cyan-500 { background: #D32F2F !important; color: #FFF8DC !important; border: 2px solid #8B4513 !important; border-radius: 8px !important; font-weight: 800 !important; box-shadow: 0 4px 0 #8B4513 !important; }
+
+/* SPIDERVERSE - HIGH QUALITY */
+body.spiderverse-mode { background: #000 !important; color: #fff !important; background-image: radial-gradient(circle, #E50914 2px, transparent 2.5px), radial-gradient(circle, #00A8E8 1px, transparent 1.5px) !important; background-size: 30px 30px, 50px 50px !important; background-position: 0 0, 15px 15px !important; font-family: 'Bangers', cursive !important; }
+body.spiderverse-mode .bg-zinc-900 { background: #fff !important; border: 5px solid #000 !important; box-shadow: 10px 10px 0 #E50914 !important; border-radius: 0 !important; color: #000 !important; transform: rotate(-0.5deg); }
+body.spiderverse-mode .bg-zinc-900 .text-white { color: #000 !important; font-family: 'Bangers' !important; font-size: 1.2em !important; }
+body.spiderverse-mode .bg-cyan-500 { background: #E50914 !important; color: #fff !important; border: 3px solid #000 !important; box-shadow: 4px 4px 0 #000 !important; font-family: 'Bangers' !important; font-size: 18px !important; }
+
+/* BARBIE - HIGH QUALITY */
+body.barbie-mode { background: #FF69B4 !important; background-image: radial-gradient(circle, #fff 1px, transparent 1.5px) !important; background-size: 20px 20px !important; color: #fff !important; font-family: 'Fredoka', sans-serif !important; }
+body.barbie-mode .bg-zinc-950 { background: transparent !important; }
+body.barbie-mode .bg-zinc-900 { background: #fff !important; border: 4px solid #FF1493 !important; border-radius: 28px !important; color: #FF1493 !important; box-shadow: 0 8px 0 #FF1493 !important; }
+body.barbie-mode .bg-zinc-900 .text-white { color: #FF1493 !important; }
+body.barbie-mode .text-zinc-400 { color: #FF69B4 !important; }
+body.barbie-mode .bg-cyan-500 { background: #FF1493 !important; border-radius: 24px !important; font-weight: 800 !important; }
+
+/* MARVEL - ENHANCED HIGH QUALITY */
+body.marvel-mode { background: #E62429 !important; background-image: radial-gradient(circle at 20% 30%, #000 2px, transparent 2.5px), radial-gradient(circle at 80% 70%, #000 1px, transparent 1.5px) !important; background-size: 40px 40px, 60px 60px !important; color: #fff !important; font-family: 'Bangers', 'Space Grotesk', sans-serif !important; }
+body.marvel-mode .bg-zinc-950 { background: transparent !important; }
+body.marvel-mode .bg-zinc-900 { background: #000 !important; border: 3px solid #fff !important; border-left: 8px solid #E62429 !important; border-radius: 0 !important; box-shadow: 8px 8px 0 #fff !important; position: relative; transform: skew(-1deg); }
+body.marvel-mode .bg-zinc-900::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1.5px); background-size: 15px 15px; pointer-events: none; }
+body.marvel-mode .bg-zinc-900::after { content: '💥 POW!'; position: absolute; top: -10px; right: -10px; background: #FFE81F; color: #000; font-family: 'Bangers'; font-size: 12px; padding: 4px 8px; border: 2px solid #000; transform: rotate(15deg); box-shadow: 2px 2px 0 #000; }
+body.marvel-mode .bg-zinc-900 .text-white { color: #fff !important; font-family: 'Bangers' !important; letter-spacing: 1px !important; }
+body.marvel-mode .bg-cyan-500 { background: #FFE81F !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: 5px 5px 0 #000 !important; font-family: 'Bangers' !important; font-size: 20px !important; }
+
+/* VAPORWAVE - HIGH QUALITY */
+body.vaporwave-mode { background: linear-gradient(180deg, #FF71CE 0%, #01CDFE 100%) !important; color: #fff !important; font-family: 'Space Grotesk', sans-serif !important; }
+body.vaporwave-mode .bg-zinc-950 { background: transparent !important; }
+body.vaporwave-mode .bg-zinc-900 { background: rgba(0,0,0,0.7) !important; backdrop-filter: blur(15px); border: 2px solid #FF71CE !important; border-radius: 0 !important; box-shadow: 0 0 20px rgba(255,113,206,0.5) !important; }
+body.vaporwave-mode .bg-cyan-500 { background: linear-gradient(90deg, #FF71CE, #01CDFE) !important; }
+
+/* NARUTO - HIGH QUALITY */
+body.naruto-mode { font-family: 'Fredoka', 'Nunito', sans-serif !important; background: #0d0d0d !important; background-image: radial-gradient(circle at 15% 20%, rgba(255,107,0,0.15) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(255,0,0,0.1) 0%, transparent 40%) !important; color: #f5f5f0 !important; }
+body.naruto-mode .bg-zinc-950 { background: transparent !important; }
+body.naruto-mode .bg-zinc-900 { background: #1a1a1a !important; background-image: linear-gradient(180deg, #1e1e1e 0%, #171717 100%) !important; border: 1px solid #2a2a2a !important; border-left: 4px solid #FF6B00 !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important; }
+body.naruto-mode .bg-cyan-500 { background: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%) !important; color: #000000 !important; font-weight: 700 !important; text-transform: uppercase !important; box-shadow: 0 0 15px rgba(255,107,0,0.4) !important; }
+
+/* NOTEBOOK - HIGH QUALITY SLICK */
+body.notebook-mode { font-family: 'Patrick Hand', 'Fredoka', cursive !important; background: #1a1a1a !important; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px) !important; background-size: 100% 30px, 30px 100% !important; color: #f0f0f0 !important; }
+body.notebook-mode .bg-zinc-950 { background: transparent !important; }
+body.notebook-mode .bg-zinc-900 { background: #2b2b2b !important; background-image: linear-gradient(90deg, transparent 39px, #ff6b6b 39px, #ff6b6b 41px, transparent 41px), linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px) !important; background-size: 100% 100%, 100% 28px !important; border: 3px solid #fff !important; border-style: dashed !important; border-radius: 4px !important; box-shadow: 0 0 0 4px #2b2b2b, 0 0 20px rgba(255,255,255,0.1) !important; position: relative; }
+body.notebook-mode .bg-zinc-900::before { content: '✏️ 📝 📎 ✂️ 🖊️ 🖍️'; position: absolute; top: -14px; left: 20px; background: #2b2b2b; padding: 0 8px; font-size: 14px; letter-spacing: 4px; }
+body.notebook-mode .bg-zinc-900::after { content: '✏️'; position: absolute; bottom: 8px; right: 12px; font-size: 18px; opacity: 0.6; transform: rotate(-15deg); }
+body.notebook-mode .bg-zinc-800 { background: #333 !important; border: 2px dashed rgba(255,255,255,0.3) !important; }
+body.notebook-mode nav { background: #1a1a1a !important; border-bottom: 3px dashed #fff !important; }
+body.notebook-mode .text-white { color: #fff !important; font-family: 'Patrick Hand' !important; }
+body.notebook-mode .bg-cyan-500 { background: #fff !important; color: #1a1a1a !important; border: 2px solid #fff !important; font-family: 'Patrick Hand' !important; box-shadow: 3px 3px 0 rgba(255,255,255,0.3) !important; transform: rotate(-1deg); }
+
+/* CANDY WORLD - HIGH QUALITY SLICK */
+body.candy-mode { font-family: 'Fredoka', 'Nunito', sans-serif !important; background: #FFB6E1 !important; background-image: radial-gradient(circle at 20% 30%, #FF69B4 15px, transparent 16px), radial-gradient(circle at 80% 20%, #7ED7FF 12px, transparent 13px), radial-gradient(circle at 40% 80%, #FFE66D 10px, transparent 11px), radial-gradient(circle at 90% 90%, #A8E6CF 14px, transparent 15px) !important; background-size: 200px 200px, 250px 250px, 180px 180px, 220px 220px !important; color: #5a2a4a !important; }
+body.candy-mode .bg-zinc-950 { background: transparent !important; }
+body.candy-mode .bg-zinc-900 { background: #fff !important; border: 3px solid #FF69B4 !important; border-radius: 24px !important; box-shadow: 0 8px 0 #FF69B4, 0 12px 20px rgba(255,105,180,0.2) !important; position: relative; }
+body.candy-mode .bg-zinc-900::before { content: '🍭 🍬 🍫 🍡'; position: absolute; top: -12px; left: 20px; background: white; border: 2px solid #FF69B4; border-radius: 20px; padding: 2px 10px; font-size: 12px; }
+body.candy-mode .bg-zinc-900::after { content: '🍭'; position: absolute; bottom: 8px; right: 12px; font-size: 20px; }
+body.candy-mode .bg-zinc-800 { background: #FFE6F2 !important; border: 2px solid #FFB6E1 !important; border-radius: 16px !important; }
+body.candy-mode nav { background: #fff !important; border-bottom: 4px solid #FF69B4 !important; border-radius: 0 0 20px 20px !important; }
+body.candy-mode .text-white { color: #5a2a4a !important; font-weight: 700 !important; }
+body.candy-mode .text-cyan-400 { color: #FF1493 !important; }
+body.candy-mode .bg-cyan-500 { background: linear-gradient(90deg, #FF69B4, #7ED7FF) !important; color: #fff !important; border-radius: 20px !important; font-weight: 800 !important; box-shadow: 0 4px 0 #FF1493 !important; border: 2px solid #fff !important; }
+
+/* MATURE HIGH QUALITY - ALL RESTORED */
+/* 3. NOIR ELEGANCE - Editorial Serif - Instrument Serif */
+body.noir-mode { background: #0a0a0a !important; color: #f5f5f0 !important; font-family: 'Instrument Serif', 'Cormorant Garamond', serif !important; }
+body.noir-mode .bg-zinc-950 { background: #0a0a0a !important; }
+body.noir-mode .bg-zinc-900 { background: #141414 !important; border: 1px solid #2a2a2a !important; border-left: 2px solid #fff !important; font-family: 'Instrument Serif', serif !important; font-size: 1.05em !important; }
+body.noir-mode .bg-cyan-500 { background: #fff !important; color: #000 !important; border-radius: 0 !important; font-family: 'Instrument Serif' !important; font-style: italic !important; }
+body.noir-mode .text-cyan-400 { font-family: 'Instrument Serif' !important; font-style: italic !important; }
+
+/* 4. OBSIDIAN LUXE - Luxury Sans - Playfair Display + Inter */
+body.obsidian-mode { background: #000000 !important; color: #c0c0c0 !important; font-family: 'Playfair Display', serif !important; }
+body.obsidian-mode .bg-zinc-950 { background: #000 !important; }
+body.obsidian-mode .bg-zinc-900 { background: #0f0f0f !important; border: 1px solid #333 !important; box-shadow: 0 20px 60px rgba(0,0,0,0.8) !important; font-family: 'Playfair Display', serif !important; }
+body.obsidian-mode .bg-cyan-500 { background: linear-gradient(135deg, #c0c0c0, #8a8a8a) !important; color: #000 !important; font-family: 'Inter' !important; letter-spacing: 2px !important; text-transform: uppercase !important; font-size: 0.9em !important; }
+
+/* 5. CHAMPAGNE - Soft Elegant - Cormorant Garamond */
+body.champagne-mode { background: #F7E7CE !important; color: #3a2a1a !important; font-family: 'Cormorant Garamond', 'Fraunces', serif !important; }
+body.champagne-mode .bg-zinc-950 { background: #F7E7CE !important; }
+body.champagne-mode .bg-zinc-900 { background: #fffaf0 !important; border: 1px solid #e8d5b5 !important; font-family: 'Cormorant Garamond' !important; font-weight: 500 !important; }
+body.champagne-mode .bg-cyan-500 { background: #3a2a1a !important; color: #F7E7CE !important; font-family: 'Cormorant Garamond' !important; font-weight: 600 !important; letter-spacing: 0.5px !important; }
+
+/* 6. GRAPHITE STUDIO - Technical - JetBrains Mono + Space Grotesk */
+body.graphite-mode { background: #2b2b2b !important; color: #e0e0e0 !important; font-family: 'JetBrains Mono', 'Space Grotesk', monospace !important; }
+body.graphite-mode .bg-zinc-950 { background: #2b2b2b !important; }
+body.graphite-mode .bg-zinc-900 { background: #333333 !important; border: 1px solid #444444 !important; font-family: 'JetBrains Mono' !important; font-size: 0.95em !important; }
+body.graphite-mode .bg-cyan-500 { background: #e0e0e0 !important; color: #000 !important; font-family: 'Space Grotesk' !important; font-weight: 700 !important; }
+
+/* 7. CHARCOAL SMOKE - Humanist - Newsreader */
+body.charcoal-mode { background: #36454F !important; color: #d3d3d3 !important; font-family: 'Newsreader', 'Lora', serif !important; }
+body.charcoal-mode .bg-zinc-950 { background: #36454F !important; }
+body.charcoal-mode .bg-zinc-900 { background: #2f3e46 !important; border: 1px solid #4a5a64 !important; font-family: 'Newsreader' !important; font-weight: 400 !important; font-style: italic !important; }
+body.charcoal-mode .bg-cyan-500 { background: #d3d3d3 !important; color: #36454F !important; font-family: 'Inter' !important; }
+
+/* 8. SLATE HERITAGE - Classic Editorial - Lora */
+body.slate-mode { background: #1e293b !important; color: #e2e8f0 !important; font-family: 'Lora', 'Newsreader', serif !important; }
+body.slate-mode .bg-zinc-950 { background: #1e293b !important; }
+body.slate-mode .bg-zinc-900 { background: #334155 !important; border: 1px solid #475569 !important; font-family: 'Lora' !important; }
+body.slate-mode .bg-cyan-500 { background: #e2e8f0 !important; color: #0f172a !important; font-family: 'Lora' !important; font-weight: 600 !important; }
+
+/* 9. WALNUT EXECUTIVE - Old Money - Fraunces */
+body.walnut-mode { background: #3C2A21 !important; color: #E5D3B3 !important; font-family: 'Fraunces', 'Cormorant Garamond', serif !important; }
+body.walnut-mode .bg-zinc-950 { background: #3C2A21 !important; }
+body.walnut-mode .bg-zinc-900 { background: #4E3629 !important; border: 1px solid #6B4F3A !important; font-family: 'Fraunces' !important; font-weight: 500 !important; }
+body.walnut-mode .bg-cyan-500 { background: #E5D3B3 !important; color: #3C2A21 !important; font-family: 'Fraunces' !important; font-weight: 700 !important; }
+
+/* 10. CARBON FIBER - Industrial Mono - Space Mono */
+body.carbon-mode { background: #121212 !important; color: #a0a0a0 !important; font-family: 'Space Mono', 'JetBrains Mono', monospace !important; background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%) !important; background-size: 10px 10px !important; }
+body.carbon-mode .bg-zinc-950 { background: transparent !important; }
+body.carbon-mode .bg-zinc-900 { background: #1e1e1e !important; border: 1px solid #333 !important; font-family: 'Space Mono' !important; text-transform: uppercase !important; font-size: 0.85em !important; letter-spacing: 1px !important; }
+body.carbon-mode .bg-cyan-500 { background: #a0a0a0 !important; color: #000 !important; font-family: 'Space Mono' !important; }
+
+/* 11. ONYX & GOLD - Luxury Gold - Cinzel + Cormorant */
+body.onyxgold-mode { background: #000000 !important; color: #D4AF37 !important; font-family: 'Cinzel', 'Cormorant Garamond', serif !important; }
+body.onyxgold-mode .bg-zinc-950 { background: #000 !important; }
+body.onyxgold-mode .bg-zinc-900 { background: #0a0a0a !important; border: 1px solid #D4AF37 !important; border-left: 3px solid #D4AF37 !important; font-family: 'Cinzel' !important; letter-spacing: 1px !important; }
+body.onyxgold-mode .bg-cyan-500 { background: #D4AF37 !important; color: #000 !important; font-family: 'Cinzel' !important; font-weight: 700 !important; letter-spacing: 2px !important; }
+
+/* 12. DEEP NAVY AUTHORITY - Authority Serif - DM Serif Display */
+body.navyauthority-mode { background: #001F3F !important; color: #ffffff !important; font-family: 'DM Serif Display', 'Lora', serif !important; }
+body.navyauthority-mode .bg-zinc-950 { background: #001F3F !important; }
+body.navyauthority-mode .bg-zinc-900 { background: #002855 !important; border: 1px solid #003366 !important; font-family: 'DM Serif Display' !important; }
+body.navyauthority-mode .bg-cyan-500 { background: #ffffff !important; color: #001F3F !important; font-family: 'Inter' !important; font-weight: 700 !important; }
+
+/* 13. ESPRESSO LOUNGE - Warm Script Serif - Playfair Display */
+body.espresso-mode { background: #2C1810 !important; color: #D7BFA6 !important; font-family: 'Playfair Display', 'Fraunces', serif !important; }
+body.espresso-mode .bg-zinc-950 { background: #2C1810 !important; }
+body.espresso-mode .bg-zinc-900 { background: #3E2723 !important; border: 1px solid #5D4037 !important; font-family: 'Playfair Display' !important; font-style: italic !important; }
+body.espresso-mode .bg-cyan-500 { background: #D7BFA6 !important; color: #2C1810 !important; font-family: 'Playfair Display' !important; font-weight: 600 !important; }
+
+/* 14. CONCRETE MODERN - Brutalist - Sora */
+body.concrete-mode { background: #B8B8B8 !important; color: #222222 !important; font-family: 'Sora', 'Space Grotesk', sans-serif !important; }
+body.concrete-mode .bg-zinc-950 { background: #B8B8B8 !important; }
+body.concrete-mode .bg-zinc-900 { background: #D3D3D3 !important; border: 1px solid #999999 !important; font-family: 'Sora' !important; font-weight: 600 !important; text-transform: uppercase !important; font-size: 0.9em !important; }
+body.concrete-mode .text-white { color: #222222 !important; }
+body.concrete-mode .bg-cyan-500 { background: #222222 !important; color: #ffffff !important; font-family: 'Sora' !important; letter-spacing: 1px !important; }
+
+/* 15. MONOCHROME EDITORIAL - Newspaper - EB Garamond */
+body.monochrome-mode { background: #ffffff !important; color: #000000 !important; font-family: 'EB Garamond', 'Instrument Serif', serif !important; }
+body.monochrome-mode .bg-zinc-950 { background: #ffffff !important; }
+body.monochrome-mode .bg-zinc-900 { background: #ffffff !important; border: 2px solid #000000 !important; border-radius: 0 !important; font-family: 'EB Garamond' !important; font-weight: 600 !important; }
+body.monochrome-mode .text-white { color: #000000 !important; }
+body.monochrome-mode .bg-cyan-500 { background: #000000 !important; color: #ffffff !important; border-radius: 0 !important; font-family: 'Instrument Serif' !important; text-transform: uppercase !important; letter-spacing: 2px !important; }
+
+/* 16. SILK NOIR - Soft Luxury - Bodoni Moda */
+body.silk-mode { background: #0f0f0f !important; color: #e8e8e8 !important; font-family: 'Bodoni Moda', 'Cormorant Garamond', serif !important; }
+body.silk-mode .bg-zinc-950 { background: #0f0f0f !important; }
+body.silk-mode .bg-zinc-900 { background: linear-gradient(135deg, #1a1a1a, #0f0f0f) !important; border: 1px solid #2a2a2a !important; font-family: 'Bodoni Moda' !important; font-style: italic !important; }
+body.silk-mode .bg-cyan-500 { background: #e8e8e8 !important; color: #000 !important; font-family: 'Bodoni Moda' !important; }
+
+/* 17. VELVET MIDNIGHT - Mystic - Fraunces + Instrument Serif */
+body.velvet-mode { background: #1A0A2E !important; color: #E0D7FF !important; font-family: 'Fraunces', 'Instrument Serif', serif !important; }
+body.velvet-mode .bg-zinc-950 { background: #1A0A2E !important; }
+body.velvet-mode .bg-zinc-900 { background: #231942 !important; border: 1px solid #5E548E !important; font-family: 'Fraunces' !important; font-weight: 400 !important; font-style: italic !important; }
+body.velvet-mode .bg-cyan-500 { background: #9F86C0 !important; color: #1A0A2E !important; font-family: 'Fraunces' !important; font-weight: 700 !important; }
+
+/* 18. LINEN NATURAL - Organic - Lora + Newsreader */
+body.linen-mode { background: #FAF0E6 !important; color: #5C4B37 !important; font-family: 'Lora', 'Newsreader', serif !important; }
+body.linen-mode .bg-zinc-950 { background: #FAF0E6 !important; }
+body.linen-mode .bg-zinc-900 { background: #FFFEF9 !important; border: 1px solid #E8DCC6 !important; font-family: 'Lora' !important; }
+body.linen-mode .text-white { color: #5C4B37 !important; }
+body.linen-mode .bg-cyan-500 { background: #5C4B37 !important; color: #FAF0E6 !important; font-family: 'Lora' !important; font-weight: 600 !important; }
+
+/* 19. EMBER GLOW - Warm Ember - Cormorant Garamond + Fraunces */
+body.ember-mode { background: #1a0f0a !important; color: #ffcc99 !important; font-family: 'Cormorant Garamond', 'Fraunces', serif !important; }
+body.ember-mode .bg-zinc-950 { background: #1a0f0a !important; }
+body.ember-mode .bg-zinc-900 { background: #2a1a0f !important; border: 1px solid #5a3a2a !important; box-shadow: 0 0 20px rgba(255,100,0,0.1) !important; font-family: 'Cormorant Garamond' !important; font-style: italic !important; }
+body.ember-mode .bg-cyan-500 { background: #ff6b35 !important; color: #ffffff !important; font-family: 'Fraunces' !important; }
+
+/* 20. UMBER EARTH - Earthy - Fraunces */
+body.umber-mode { background: #352208 !important; color: #E6CCB2 !important; font-family: 'Fraunces', 'Lora', serif !important; }
+body.umber-mode .bg-zinc-950 { background: #352208 !important; }
+body.umber-mode .bg-zinc-900 { background: #4A2C0A !important; border: 1px solid #7F5539 !important; font-family: 'Fraunces' !important; font-weight: 500 !important; }
+body.umber-mode .bg-cyan-500 { background: #E6CCB2 !important; color: #352208 !important; font-family: 'Fraunces' !important; font-weight: 700 !important; }
+
+/* 21. PAPER ARCHIVE - Archive - EB Garamond + Newsreader */
+body.paper-mode { background: #F5F5DC !important; color: #3a3a3a !important; font-family: 'EB Garamond', 'Newsreader', serif !important; }
+body.paper-mode .bg-zinc-950 { background: #F5F5DC !important; }
+body.paper-mode .bg-zinc-900 { background: #FFFEF7 !important; border: 1px solid #D6CFC4 !important; box-shadow: 2px 2px 0 #D6CFC4 !important; font-family: 'EB Garamond' !important; }
+body.paper-mode .text-white { color: #3a3a3a !important; }
+body.paper-mode .bg-cyan-500 { background: #3a3a3a !important; color: #F5F5DC !important; font-family: 'EB Garamond' !important; letter-spacing: 1px !important; }
+
+/* 22. BASALT STONE - Stone - Space Grotesk + JetBrains Mono */
+body.basalt-mode { background: #2F2F2F !important; color: #C0C0C0 !important; font-family: 'Space Grotesk', 'JetBrains Mono', sans-serif !important; }
+body.basalt-mode .bg-zinc-950 { background: #2F2F2F !important; }
+body.basalt-mode .bg-zinc-900 { background: #3a3a3a !important; border: 1px solid #4a4a4a !important; font-family: 'Space Grotesk' !important; font-weight: 500 !important; letter-spacing: 0.5px !important; }
+body.basalt-mode .bg-cyan-500 { background: #C0C0C0 !important; color: #000000 !important; font-family: 'JetBrains Mono' !important; }
+
+
+
+body.whatsapp-mode { background: #e5ddd5 !important; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') !important; color: #111 !important; }
+body.whatsapp-mode .bg-zinc-950 { background: transparent !important; }
+body.whatsapp-mode .bg-zinc-900 { background: #fff !important; border-radius: 8px 0 8px 8px !important; box-shadow: 0 1px 0.5px rgba(0,0,0,0.13) !important; position: relative; }
+body.whatsapp-mode .bg-zinc-900::before { content: ''; position: absolute; top: 0; right: -8px; width: 0; height: 0; border-left: 8px solid #fff; border-bottom: 8px solid transparent; }
+body.whatsapp-mode .bg-zinc-900::after { content: '✓✓'; position: absolute; bottom: 6px; right: 10px; font-size: 10px; color: #53bdeb; }
+body.whatsapp-mode .bg-cyan-500 { background: #25D366 !important; color: #fff !important; border-radius: 20px !important; box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important; }
+body.whatsapp-mode nav { background: #075E54 !important; border-bottom: none !important; }
+body.whatsapp-mode nav .text-white { color: #fff !important; }
+body.whatsapp-mode .text-white { color: #111 !important; }
+body.youtube-mode { background: #0f0f0f !important; color: #fff !important; font-family: 'Roboto', 'Inter', sans-serif !important; }
+body.youtube-mode .bg-zinc-950 { background: #0f0f0f !important; }
+body.youtube-mode .bg-zinc-900 { background: #212121 !important; border-radius: 12px !important; border: none !important; }
+body.youtube-mode .bg-zinc-900:hover { transform: scale(1.02); }
+body.youtube-mode .bg-cyan-500 { background: #FF0000 !important; color: #fff !important; border-radius: 20px !important; font-weight: 600 !important; }
+body.youtube-mode .text-cyan-400 { color: #FF0000 !important; }
+body.youtube-mode nav { background: #0f0f0f !important; border-bottom: 1px solid #303030 !important; }
+
+/* HORROR - REALLY SCARY SLICK HIGH QUALITY */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&display=swap');
+body.horror-mode { background: #000 !important; color: #ff0000 !important; font-family: 'Creepster', 'Nosifer', cursive !important; background-image: radial-gradient(circle at 20% 50%, rgba(255,0,0,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(139,0,0,0.2) 0%, transparent 50%), linear-gradient(rgba(255,0,0,0.02) 1px, transparent 1px) !important; background-size: 100% 100%, 100% 100%, 100% 4px !important; animation: flicker 0.15s infinite alternate !important; }
+@keyframes flicker { 0% { filter: brightness(1); } 100% { filter: brightness(1.1) contrast(1.1); } }
+body.horror-mode .bg-zinc-950 { background: transparent !important; }
+body.horror-mode .bg-zinc-900 { background: #0a0a0a !important; border: 2px solid #8B0000 !important; border-radius: 4px !important; box-shadow: 0 0 20px rgba(255,0,0,0.3), inset 0 0 20px rgba(139,0,0,0.1) !important; position: relative; overflow: hidden; }
+body.horror-mode .bg-zinc-900::before { content: '🩸'; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #8B0000, #ff0000, #8B0000); box-shadow: 0 2px 10px #ff0000; }
+body.horror-mode .bg-zinc-900::after { content: '👁️ DON\'T LOOK BACK'; position: absolute; bottom: 4px; right: 8px; font-family: 'Nosifer'; font-size: 8px; color: #ff0000; opacity: 0.5; letter-spacing: 1px; }
+body.horror-mode .bg-zinc-800 { background: #1a0000 !important; border: 1px solid #8B0000 !important; }
+body.horror-mode nav { background: #000 !important; border-bottom: 3px solid #8B0000 !important; box-shadow: 0 0 30px rgba(255,0,0,0.5) !important; }
+body.horror-mode .text-white { color: #ff0000 !important; font-family: 'Creepster' !important; text-shadow: 0 0 10px #ff0000, 2px 2px 0 #000 !important; letter-spacing: 1px !important; }
+body.horror-mode .text-zinc-400 { color: #8B0000 !important; font-family: 'Creepster' !important; }
+body.horror-mode .text-cyan-400 { color: #ff0000 !important; text-shadow: 0 0 15px #ff0000 !important; }
+body.horror-mode .bg-cyan-500 { background: #8B0000 !important; color: #fff !important; border: 2px solid #ff0000 !important; border-radius: 0 !important; font-family: 'Nosifer' !important; box-shadow: 0 0 20px rgba(255,0,0,0.6) !important; text-transform: uppercase !important; }
+
+/* RAINBOW - SLICK HIGH QUALITY */
+body.rainbow-mode { background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3) !important; background-size: 1800% 1800% !important; animation: rainbowBG 18s ease infinite !important; color: #fff !important; font-family: 'Fredoka', sans-serif !important; }
+@keyframes rainbowBG { 0%{background-position:0% 82%} 50%{background-position:100% 19%} 100%{background-position:0% 82%} }
+body.rainbow-mode .bg-zinc-950 { background: transparent !important; }
+body.rainbow-mode .bg-zinc-900 { background: rgba(255,255,255,0.9) !important; backdrop-filter: blur(10px); border: 3px solid transparent !important; border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1 !important; border-radius: 20px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important; color: #000 !important; }
+body.rainbow-mode .bg-zinc-900 .text-white { color: #000 !important; }
+body.rainbow-mode .text-zinc-400 { color: #666 !important; }
+body.rainbow-mode .bg-cyan-500 { background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) !important; background-size: 200% 200% !important; animation: rainbowBG 3s ease infinite !important; color: #fff !important; border-radius: 20px !important; font-weight: 800 !important; border: 2px solid #fff !important; box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important; }
+body.rainbow-mode nav { background: rgba(255,255,255,0.8) !important; backdrop-filter: blur(15px); border-bottom: 3px solid transparent !important; border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1 !important; }
+body.rainbow-mode nav .text-white { color: #000 !important; }
+
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+@keyframes dustFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-40px) scale(0.3); opacity: 0; }
+}
+
+
+
+
+
+
+
+
+/* PASTE AT VERY BOTTOM OF style.css - FIXED TO MATCH PREVIEW */
+#pinnedSection { animation: fadeIn 0.3s ease; }
+.pin-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 24px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.pin-btn:hover { background: rgba(6,182,212,0.85); transform: scale(1.05); }
+.pin-btn.is-pinned {
+  background: #06b6d4;
+  color: #000;
+  border-color: #06b6d4;
+  font-weight: 600;
+  box-shadow: 0 0 18px rgba(6,182,212,0.6), 0 2px 10px rgba(6,182,212,0.4);
+}
+.pinned-card {
+  border: 2px solid rgba(6,182,212,0.7) !important;
+  box-shadow: 0 0 24px rgba(6,182,212,0.22), inset 0 0 0 1px rgba(6,182,212,0.15) !important;
+}
+
+button,
+a,
+[onclick],
+input[type="range"] {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* The rule above only catches literal onclick="..." HTML attributes — it misses
+   anything wired via addEventListener or a JS .onclick property assignment,
+   which is how most of the Attic's custom UI is actually built. Targeting the
+   classes directly works regardless of how the click listener was attached. */
+.attic-room-door,
+.attic-disc,
+.puzzle-image-thumb,
+.puzzle-size-btn,
+.puzzle-pack-pill,
+.em-card,
+.em-size-btn,
+.wm-card,
+.wm-hole,
+.arcade-game-card,
+.mc-track-row,
+.sk-canvas,
+.attic-back-btn,
+#atticDoorVisual {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+/* ===================================================
+   DAY 4: SKELETON LOADER
+   =================================================== */
+
+/* Skeleton animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background: #27272a;
+    border-radius: 12px;
+    background-image: linear-gradient(
+        90deg,
+        #27272a 0px,
+        #3f3f46 40px,
+        #27272a 80px
+    );
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    animation: shimmer 1.2s ease-in-out infinite;
+    min-height: 80px;
+    margin-bottom: 16px;
+}
+
+/* Specific skeleton sizes */
+.skeleton-card {
+    min-height: 150px;
+    border-radius: 24px;
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 60%;
+    border-radius: 6px;
+}
+
+.skeleton-text {
+    height: 14px;
+    width: 90%;
+    border-radius: 4px;
+    margin-top: 8px;
+}
+
+.skeleton-text-short {
+    height: 14px;
+    width: 40%;
+    border-radius: 4px;
+    margin-top: 8px;
+}
+
+.skeleton-image {
+    height: 120px;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+}
+
+
+.attic-track-player {
+  height: 36px;
+  border-radius: 10px;
+  filter: invert(90%) sepia(8%) saturate(500%) hue-rotate(340deg) brightness(95%);
+}
