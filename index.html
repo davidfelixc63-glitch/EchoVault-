@@ -1,29 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta property="og:title" content="ECHOVAULT">
-<meta property="og:description" content="Private memory journal for preserving life's most precious memories.">
-<meta property="og:image" content="[https://example.com/your-image.jpg](https://example.com/your-image.jpg)">
-<meta property="og:url" content="[https://example.com/your-page](https://echo-vault-tan.vercel.app/)">
-<meta property="og:type" content="website">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
-  <!-- Primary SEO Meta Tags -->
-<title>EchoVault | Private Local-First Memory Journal</title>
-<meta name="description" content="Preserve what matters most. EchoVault is a private, local-first multimedia journal for your photos, voice notes, and milestones. 100% private, no cloud.">
-<meta name="keywords" content="private journal, local-first app, multimedia vault, voice note journal, offline diary">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>EchoVault | Private Local-First Memory Journal & Diary</title>
+    <meta name="description" content="Preserve what matters most. EchoVault is a private, local-first multimedia journal for photos, voice notes, and milestones. 100% private, no cloud storage.">
+    <meta name="keywords" content="private journal, local-first app, offline diary, multimedia vault, voice note journal, secure memory keeping">
+    <meta name="author" content="David Felix">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vercel.app">
 
-<!-- Open Graph / Facebook (For when people share echo-vault-tan.vercel.app) -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="EchoVault | Private Local-First Memory Journal">
-<meta property="og:description" content="Your private attic for memories. Photos, voice notes, and achievements stored completely on your device.">
-<meta property="og:image" content="https://vercel.app"> <!-- Add a real preview thumbnail image path here -->
+    <!-- Open Graph / Facebook / LinkedIn (Social Sharing Links) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vercel.app">
+    <meta property="og:title" content="EchoVault | Private Local-First Memory Journal">
+    <meta property="og:description" content="Your private attic for memories. Photos, voice notes, and achievements stored completely secure on your device. No cloud, no tracking.">
+    <meta property="og:image" content="https://vercel.appog-preview.jpg"> <!-- Note: Put a real preview screenshot image in your project root named og-preview.jpg -->
+
+    <!-- Twitter Card Layout -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://vercel.app">
+    <meta name="twitter:title" content="EchoVault | Private Local-First Memory Journal">
+    <meta name="twitter:description" content="Preserve what matters most. Multimedia journaling with 80+ achievements, built with total local privacy.">
+    <meta name="twitter:image" content="https://vercel.appog-preview.jpg">
+
+        <!-- Structured JSON-LD Data (Google Schema Markup) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "EchoVault",
+      "url": "https://echo-vault-tan.vercel.app",
+      "description": "A private, local-first vault for memories, photos, and voice notes stored entirely in the browser's localStorage.",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "David Felix"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Local-first architecture using localStorage",
+        "PIN-protected secure vault access",
+        "Voice note recording and photo attachments",
+        "80+ unlockable gamified achievements",
+        "Custom UI themes and fun accent modes",
+        "Data backup export and PDF archival filters"
+      ]
+    }
+    </script>
+
+    <!-- Tailwind & Custom Stylesheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Attic/attic.css">
   
-  <title>EchoVault • Preserve Your Story</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="Attic/attic.css">
+  
 
 
 <link rel="manifest" href="manifest.json">
